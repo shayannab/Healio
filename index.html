@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Dr. Freud.ai - Your personal mental health companion. Track your mood, journal your thoughts, and gain insights into your mental wellness.">
+    <title>Dr. Freud.ai | Mental Health Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">🧠</div>
+                <span class="logo-text">Dr.Freud<span>.ai</span></span>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Journal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            </svg>
+                            Therapist
+                        </a>
+                    </li>
+                    <li class="nav-item" style="margin-top: auto;">
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">S</div>
+                <div class="user-info">
+                    <div class="user-name">Shinomiya</div>
+                    <div class="user-status">Feeling Good ✨</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="greeting">
+                <h1><span class="greeting-wave">👋</span>Good Morning, Shinomiya</h1>
+                <p>Let's check in on how you're feeling today.</p>
+            </header>
+
+            <!-- Mood Wave Graph -->
+            <section class="card mood-wave-card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Mood Journey</h2>
+                    <div class="mood-wave-tabs">
+                        <button class="mood-wave-tab active">All</button>
+                        <button class="mood-wave-tab">Days</button>
+                        <button class="mood-wave-tab">Weeks</button>
+                        <button class="mood-wave-tab">Months</button>
+                    </div>
+                </div>
+                <div class="mood-wave-graph">
+                    <svg class="mood-wave-svg" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#9ABF89;stop-opacity:0.4" />
+                                <stop offset="100%" style="stop-color:#9ABF89;stop-opacity:0.05" />
+                            </linearGradient>
+                        </defs>
+                        <path
+                            d="M0,150 C80,120 120,40 200,60 C280,80 320,160 400,130 C480,100 520,30 600,50 C680,70 720,100 800,80 L800,200 L0,200 Z"
+                            fill="url(#waveGradient)" />
+                        <path
+                            d="M0,150 C80,120 120,40 200,60 C280,80 320,160 400,130 C480,100 520,30 600,50 C680,70 720,100 800,80"
+                            fill="none" stroke="#9ABF89" stroke-width="3" stroke-linecap="round" />
+                        <circle cx="200" cy="60" r="8" fill="#9ABF89" stroke="white" stroke-width="3" />
+                        <circle cx="400" cy="130" r="8" fill="#F27A5E" stroke="white" stroke-width="3" />
+                        <circle cx="600" cy="50" r="8" fill="#9ABF89" stroke="white" stroke-width="3" />
+                        <text x="200" y="35" text-anchor="middle" fill="#7CB369" font-size="12"
+                            font-weight="600">Happy</text>
+                        <text x="400" y="160" text-anchor="middle" fill="#F27A5E" font-size="12"
+                            font-weight="600">Depressed</text>
+                        <text x="600" y="30" text-anchor="middle" fill="#8D8276" font-size="12"
+                            font-weight="600">Neutral</text>
+                    </svg>
+                </div>
+                <div class="mood-labels">
+                    <span class="mood-label">Mon</span>
+                    <span class="mood-label">Tue</span>
+                    <span class="mood-label">Wed</span>
+                    <span class="mood-label">Thu</span>
+                    <span class="mood-label">Fri</span>
+                    <span class="mood-label">Sat</span>
+                    <span class="mood-label">Sun</span>
+                </div>
+            </section>
+
+            <!-- Quick Check-in -->
+            <section class="card checkin-card">
+                <h2 class="checkin-question">How are you feeling right now?</h2>
+                <div class="emoji-selector">
+                    <button class="emoji-option" data-mood="sad">
+                        <div class="emoji-face sad">😢</div>
+                        <span class="emoji-label">Sad</span>
+                    </button>
+                    <button class="emoji-option" data-mood="anxious">
+                        <div class="emoji-face anxious">😰</div>
+                        <span class="emoji-label">Anxious</span>
+                    </button>
+                    <button class="emoji-option" data-mood="neutral">
+                        <div class="emoji-face neutral">😐</div>
+                        <span class="emoji-label">Neutral</span>
+                    </button>
+                    <button class="emoji-option" data-mood="good">
+                        <div class="emoji-face good">🙂</div>
+                        <span class="emoji-label">Good</span>
+                    </button>
+                    <button class="emoji-option" data-mood="happy">
+                        <div class="emoji-face happy">😊</div>
+                        <span class="emoji-label">Happy</span>
+                    </button>
+                </div>
+                <div class="checkin-expand" id="checkinExpand">
+                    <textarea class="checkin-textarea" rows="4"
+                        placeholder="Tell us more about how you're feeling..."></textarea>
+                    <button class="checkin-submit">Log Mood ✓</button>
+                </div>
+            </section>
+
+            <!-- Journal Entries -->
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Journal Entries</h2>
+                    <button class="card-action">
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="journal-entries">
+                    <article class="journal-entry">
+                        <div class="entry-mood" style="background: var(--mood-sad);">😔</div>
+                        <div class="entry-content">
+                            <div class="entry-date">Today, 10:30 AM</div>
+                            <p class="entry-preview">I had a bad day today, at school... It's fine I guess...</p>
+                            <span class="entry-tag highlighted">Distress Detected</span>
+                        </div>
+                    </article>
+                    <article class="journal-entry">
+                        <div class="entry-mood" style="background: var(--mood-neutral);">😐</div>
+                        <div class="entry-content">
+                            <div class="entry-date">Yesterday, 8:45 PM</div>
+                            <p class="entry-preview">Feeling neutral today. Nothing special happened but that's okay.
+                            </p>
+                            <span class="entry-tag">Routine Check-in</span>
+                        </div>
+                    </article>
+                    <article class="journal-entry">
+                        <div class="entry-mood" style="background: var(--mood-happy);">😊</div>
+                        <div class="entry-content">
+                            <div class="entry-date">Dec 10, 3:15 PM</div>
+                            <p class="entry-preview">Great day! Finally finished my project and got positive feedback.
+                            </p>
+                            <span class="entry-tag">Achievement</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <!-- INSIGHTS SIDEBAR -->
+        <aside class="insights-sidebar">
+            <!-- Freud Score -->
+            <section class="card freud-score-card">
+                <div class="freud-score-header">
+                    <span class="freud-score-title">Freud Score</span>
+                    <span class="freud-score-badge">NORMAL</span>
+                </div>
+                <div class="freud-score-value">
+                    <div class="score-ring">
+                        <svg viewBox="0 0 160 160">
+                            <circle class="score-ring-bg" cx="80" cy="80" r="70" />
+                            <circle class="score-ring-progress" cx="80" cy="80" r="70" />
+                        </svg>
+                        <div class="score-ring-value">
+                            <span class="score-number">80</span>
+                        </div>
+                    </div>
+                    <p class="score-message">Congratulations! You are mentally healthy.</p>
+                </div>
+            </section>
+
+            <!-- Calendar -->
+            <section class="card calendar-card">
+                <div class="card-header">
+                    <h2 class="card-title">December 2024</h2>
+                    <div class="calendar-nav">
+                        <button id="calPrev">‹</button>
+                        <button id="calNext">›</button>
+                    </div>
+                </div>
+                <div class="calendar-weekdays">
+                    <span class="calendar-weekday">M</span>
+                    <span class="calendar-weekday">T</span>
+                    <span class="calendar-weekday">W</span>
+                    <span class="calendar-weekday">T</span>
+                    <span class="calendar-weekday">F</span>
+                    <span class="calendar-weekday">S</span>
+                    <span class="calendar-weekday">S</span>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </section>
+
+            <!-- Predictions -->
+            <section class="card predictions-card">
+                <div class="card-header">
+                    <h2 class="card-title">AI Mood Predictions</h2>
+                    <button class="card-action">Next 1w ▾</button>
+                </div>
+                <div class="predictions-row">
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Mon</span>
+                        <div class="prediction-emoji" style="background: var(--mood-happy);">😊</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Tue</span>
+                        <div class="prediction-emoji" style="background: var(--mood-happy);">😊</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Wed</span>
+                        <div class="prediction-emoji" style="background: var(--mood-sad);">😢</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Thu</span>
+                        <div class="prediction-emoji" style="background: var(--mood-neutral);">😐</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Fri</span>
+                        <div class="prediction-emoji" style="background: var(--mood-good);">🙂</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Sat</span>
+                        <div class="prediction-emoji" style="background: var(--mood-happy);">😊</div>
+                    </div>
+                    <div class="prediction-day">
+                        <span class="prediction-day-name">Sun</span>
+                        <div class="prediction-emoji" style="background: var(--mood-sad);">😔</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendation -->
+            <section class="card recommendation-card">
+                <div class="recommendation-icon">🚶</div>
+                <h3 class="recommendation-title">Take a 15-minute walk</h3>
+                <p class="recommendation-text">Based on your mood patterns, a short walk could help boost your energy.
+                </p>
+                <button class="recommendation-btn">
+                    Start Activity
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </section>
+        </aside>
+    </div>
+
+    <button class="fab" title="Log new entry">+</button>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
