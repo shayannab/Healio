@@ -1,0 +1,49 @@
+/* ================================================
+   MOODFLOW DESIGN SYSTEM
+   Minimal Clinical Aesthetic
+   ================================================ */
+
+:root {
+    /* --- BACKGROUNDS (Paper & Earth) --- */
+    --bg-cream: #F5F2EB;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #5C4B41;
+    --bg-sidebar-hover: #6d5b50;
+
+    /* --- BRAND COLORS (Moods) --- */
+    --primary-sage: #9ABF89;
+    --primary-sage-light: #b5d4a8;
+    --mood-happy: #F4D35E;
+    --mood-sad: #F27A5E;
+    --mood-neutral: #8D8276;
+    --mood-good: #7CB369;
+    --mood-anxious: #a78bfa;
+
+    /* --- STRESS & BURNOUT --- */
+    --stress-low: #7CB369;
+    --stress-medium: #F4D35E;
+    --stress-high: #F27A5E;
+    --burnout-low: #7CB369;
+    --burnout-medium: #F4D35E;
+    --burnout-high: #F27A5E;
+    --burnout-critical: #DC2626;
+
+    /* --- TEXT & INTERFACE --- */
+    --text-primary: #3E3228;
+    --text-secondary: #8A8175;
+    --text-light: #FFFFFF;
+    --accent-brown: #5C4B41;
+
+    /* --- UI PHYSICS --- */
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --shadow-soft: 0px 8px 24px rgba(62, 50, 40, 0.08);
+    --shadow-hover: 0px 12px 32px rgba(62, 50, 40, 0.12);
+
+    /* --- TRANSITIONS --- */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

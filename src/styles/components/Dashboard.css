@@ -1,0 +1,178 @@
+/* ================================================
+   DASHBOARD LAYOUT STYLES (Floating Nav Version)
+   Main content area layout without sidebar
+   ================================================ */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-cream);
+}
+
+/* Top Header */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: transparent;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary-sage);
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.header-logo-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+    color: var(--text-primary);
+}
+
+.header-logo-text span {
+    color: var(--primary-sage);
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.header-user-status {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Main Layout */
+.main-layout {
+    display: flex;
+    flex: 1;
+    padding: 0 40px 120px;
+    gap: 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.greeting {
+    margin-bottom: 32px;
+}
+
+.greeting-wave {
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+.greeting h1 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.greeting p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* Right Sidebar (Insights) */
+.insights-sidebar {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex-shrink: 0;
+}
+
+/* Floating Action Button - repositioned */
+.fab {
+    position: fixed;
+    bottom: 100px;
+    right: 32px;
+    width: 56px;
+    height: 56px;
+    background: var(--primary-sage);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(154, 191, 137, 0.4);
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: var(--primary-sage-light);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1200px) {
+    .main-layout {
+        padding: 0 24px 120px;
+    }
+
+    .insights-sidebar {
+        width: 280px;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .insights-sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .insights-sidebar>* {
+        flex: 1 1 280px;
+    }
+}
+
+@media (max-width: 600px) {
+    .top-header {
+        padding: 16px 20px;
+    }
+
+    .main-layout {
+        padding: 0 16px 100px;
+    }
+
+    .header-user-name,
+    .header-user-status {
+        display: none;
+    }
+}
