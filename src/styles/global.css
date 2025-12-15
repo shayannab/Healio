@@ -1,9 +1,10 @@
 /* ================================================
    MOODFLOW GLOBAL STYLES
-   Base resets and typography
+   Warm, Comforting, Premium
    ================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700&display=swap');
+/* DM Sans + DM Serif Display - Friendly yet premium */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap');
 @import './variables.css';
 
 /* === RESET & BASE === */
@@ -18,10 +19,12 @@
 html {
     font-size: 16px;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-cream);
     color: var(--text-primary);
     line-height: 1.6;
@@ -30,11 +33,16 @@ body {
 
 h1,
 h2,
-h3,
+h3 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    line-height: 1.15;
+}
+
 h4,
 h5,
 h6 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     line-height: 1.3;
 }

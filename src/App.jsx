@@ -3,10 +3,11 @@
  * Main Application Entry Point
  */
 import './styles/global.css';
-import MoodDashboard from './pages/MoodDashboard';
+import LandingPage from './pages/LandingPage';
+// import MoodDashboard from './pages/MoodDashboard';
 
 function App() {
-  return <MoodDashboard />;
+  return <LandingPage />;
 }
 
 export default App;

@@ -1,49 +1,62 @@
 /* ================================================
    MOODFLOW DESIGN SYSTEM
-   Minimal Clinical Aesthetic
+   Warm, Comforting, Premium
    ================================================ */
 
 :root {
-    /* --- BACKGROUNDS (Paper & Earth) --- */
-    --bg-cream: #F5F2EB;
+    /* --- BACKGROUNDS (Warm & Cozy) --- */
+    --bg-cream: #FAF8F5;
+    --bg-warm: #F5F1EB;
     --bg-card: #FFFFFF;
-    --bg-sidebar: #5C4B41;
-    --bg-sidebar-hover: #6d5b50;
+    --bg-dark: #2D2926;
+    --bg-dark-soft: #3D3835;
 
-    /* --- BRAND COLORS (Moods) --- */
-    --primary-sage: #9ABF89;
-    --primary-sage-light: #b5d4a8;
-    --mood-happy: #F4D35E;
-    --mood-sad: #F27A5E;
-    --mood-neutral: #8D8276;
-    --mood-good: #7CB369;
-    --mood-anxious: #a78bfa;
+    /* --- BRAND COLORS (Nature-Inspired) --- */
+    --sage: #7BA38E;
+    --sage-light: #9FBFAB;
+    --sage-soft: rgba(123, 163, 142, 0.12);
+    --terracotta: #C4866C;
+    --terracotta-soft: rgba(196, 134, 108, 0.12);
+    --sand: #D4C4B0;
+    --lavender: #B8A9C9;
+    --lavender-soft: rgba(184, 169, 201, 0.12);
 
-    /* --- STRESS & BURNOUT --- */
-    --stress-low: #7CB369;
-    --stress-medium: #F4D35E;
-    --stress-high: #F27A5E;
-    --burnout-low: #7CB369;
-    --burnout-medium: #F4D35E;
-    --burnout-high: #F27A5E;
-    --burnout-critical: #DC2626;
+    /* --- GRADIENTS (Soft & Warm) --- */
+    --gradient-warm: linear-gradient(135deg, #FAF8F5 0%, #F0EBE3 100%);
+    --gradient-sage: linear-gradient(135deg, #7BA38E 0%, #9FBFAB 100%);
+    --gradient-sunset: linear-gradient(135deg, #C4866C 0%, #D4A574 100%);
+    --gradient-glow: radial-gradient(ellipse at center, rgba(123, 163, 142, 0.15) 0%, transparent 70%);
 
-    /* --- TEXT & INTERFACE --- */
-    --text-primary: #3E3228;
-    --text-secondary: #8A8175;
+    /* --- TEXT (Warm Contrast) --- */
+    --text-primary: #2D2926;
+    --text-secondary: #6B635B;
+    --text-muted: #9C948C;
     --text-light: #FFFFFF;
-    --accent-brown: #5C4B41;
 
-    /* --- UI PHYSICS --- */
-    --radius-lg: 24px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
-    --shadow-soft: 0px 8px 24px rgba(62, 50, 40, 0.08);
-    --shadow-hover: 0px 12px 32px rgba(62, 50, 40, 0.12);
+    /* --- UI ELEMENTS --- */
+    --border-soft: rgba(45, 41, 38, 0.06);
+    --border-medium: rgba(45, 41, 38, 0.1);
+    --divider: rgba(45, 41, 38, 0.08);
+
+    /* --- RADII (Soft & Friendly) --- */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-2xl: 40px;
+    --radius-full: 9999px;
+
+    /* --- SHADOWS (Warm & Subtle) --- */
+    --shadow-sm: 0 2px 8px rgba(45, 41, 38, 0.04);
+    --shadow-md: 0 4px 20px rgba(45, 41, 38, 0.06);
+    --shadow-lg: 0 8px 40px rgba(45, 41, 38, 0.08);
+    --shadow-xl: 0 16px 56px rgba(45, 41, 38, 0.1);
+    --shadow-glow: 0 4px 24px rgba(123, 163, 142, 0.2);
 
     /* --- TRANSITIONS --- */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.25s ease;
-    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --duration-fast: 0.15s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.5s;
 }

@@ -1,16 +1,82 @@
-# React + Vite
+# 🌿 MoodFlow - Mental Wellness Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beautifully crafted mental health and emotional wellness web application featuring a sophisticated design with subtle kawaii elements, premium typography, and smooth animations.
 
-Currently, two official plugins are available:
+![MoodFlow Preview](https://img.shields.io/badge/React-18.x-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite)
+![CSS3](https://img.shields.io/badge/CSS3-Modern-1572B6?logo=css3)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+### Landing Page
+- **Hero Section** - Engaging entrance animations with blur effects and staggered reveals
+- **Glassmorphism Cards** - Frosted glass feature cards with subtle borders and backdrop blur
+- **Scroll Animations** - Intersection Observer-powered reveal effects throughout
+- **Auto-Carousel Testimonials** - Infinitely scrolling social proof
+- **Interactive FAQ Accordion** - Smooth expand/collapse with staggered animations
+- **Floating Navigation** - Pill-style navbar with active state tracking
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Dashboard
+- **Mood Wave Graph** - Visual representation of emotional patterns
+- **Quick Check-in** - Fast mood logging with emoji/slider selection
+- **Stress Tracker** - Daily stress level monitoring
+- **Burnout Indicator** - Work-life balance alerts
+- **Journal Entries** - Reflective writing space
+- **Coping Suggestions** - Personalized wellness activities
 
-## Expanding the ESLint configuration
+### Design System
+- **Sophisticated Kawaii** - Minimal, elegant character illustrations (Mochi, Petal, Sparkle)
+- **Premium Typography** - Fraunces (serif) + Nunito (sans-serif) font pairing
+- **Warm Color Palette** - Cream backgrounds, sage accents, earthy browns
+- **Micro-interactions** - Thoughtful hover states and transitions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🎨 Design Philosophy
+
+MoodFlow combines warmth with sophistication. The kawaii characters are designed as elegant icons rather than cartoons, using the same muted color palette as the rest of the interface. Typography is the hero—large, premium headlines create hierarchy while generous whitespace keeps the experience calm and focused.
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── common/          # Shared components (KawaiiCharacters)
+│   ├── dashboard/       # Dashboard widgets
+│   └── layout/          # Layout components (Sidebar, FloatingNav)
+├── pages/
+│   ├── LandingPage.jsx  # Marketing landing page
+│   └── MoodDashboard.jsx # Main dashboard view
+├── styles/
+│   ├── components/      # Component-specific CSS
+│   ├── global.css       # Base styles & animations
+│   └── variables.css    # Design tokens
+└── hooks/               # Custom React hooks
+```
+
+## 🛠 Tech Stack
+
+- **React 18** - UI framework
+- **Vite** - Build tool & dev server
+- **Vanilla CSS** - No framework, full control
+- **CSS Variables** - Design token system
+- **Intersection Observer** - Scroll animations
+
+## 📝 License
+
+MIT © 2024
+
+---
+
+*Built with 💚 for those who care about their mental health.*
