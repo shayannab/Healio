@@ -3,7 +3,10 @@
  * Cozy wellness vibes with sophisticated polish
  */
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/components/LandingPage.css';
+
+// ... (keep existing hook code)
 
 // Scroll reveal hook
 function useScrollReveal(threshold = 0.15) {
@@ -146,6 +149,9 @@ const features = [
 ];
 
 function LandingPage() {
+    const navigate = useNavigate();
+    const handleStart = () => navigate('/dashboard');
+
     const [openFaq, setOpenFaq] = useState(null);
 
     const [heroRef, heroVisible] = useScrollReveal(0.1);
@@ -153,6 +159,15 @@ function LandingPage() {
     const [howRef, howVisible] = useScrollReveal();
     const [testimonialsRef, testimonialsVisible] = useScrollReveal();
     const [ctaRef, ctaVisible] = useScrollReveal();
+
+    // Track window width for responsive card scaling
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <div className="landing">
@@ -167,7 +182,7 @@ function LandingPage() {
                     <a href="#how">How It Works</a>
                     <a href="#testimonials">Stories</a>
                 </div>
-                <button className="nav-cta">Start Your Journey</button>
+                <button className="nav-cta" onClick={handleStart}>Start Your Journey</button>
             </nav>
 
             {/* Hero */}
@@ -189,7 +204,7 @@ function LandingPage() {
                         and grow with AI-powered guidance. No judgment, just understanding.
                     </p>
                     <div className="hero-actions">
-                        <button className="btn-primary">
+                        <button className="btn-primary" onClick={handleStart}>
                             Begin Free Trial
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -224,38 +239,66 @@ function LandingPage() {
                     <h2>Everything you need to feel understood</h2>
                     <p>Thoughtful tools designed with care, for every moment of your journey.</p>
                 </div>
-                <div className="features-stack">
+                <div className="features-stack" style={{
+                    height: windowWidth < 1024 ? 'auto' : '550px',
+                    flexDirection: windowWidth < 1024 ? 'column' : 'row',
+                    gap: windowWidth < 1024 ? '24px' : '0',
+                    alignItems: windowWidth < 1024 ? 'center' : 'center',
+                    marginTop: windowWidth < 1024 ? '40px' : '0'
+                }}>
                     {features.map((feature, i) => {
                         const totalCards = features.length;
                         const spreadProgress = Math.min(1, Math.max(0, featuresProgress));
+                        const isMobile = windowWidth < 1024;
 
-                        // Final spread position (horizontal layout)
-                        const cardWidth = 360;
-                        const gap = 32;
+                        // Desktop: Horizontal Spread Animation
+                        // Mobile: Vertical Stack (Natural Layout)
+
+                        // Base dimensions
+                        const baseCardWidth = 360;
+                        const baseGap = 32;
+
+                        // Calculate required width
+                        const padding = 48;
+                        const requiredWidth = (totalCards * baseCardWidth) + ((totalCards - 1) * baseGap) + (padding * 2);
+
+                        // Scale factor (Desktop only)
+                        const scaleFactor = isMobile ? 1 : Math.min(1, Math.max(0.6, windowWidth / requiredWidth));
+
+                        // 1. Calculate Desktop Transform
+                        const cardWidth = baseCardWidth * scaleFactor;
+                        const gap = baseGap * scaleFactor;
                         const totalWidth = totalCards * cardWidth + (totalCards - 1) * gap;
                         const startX = -totalWidth / 2 + cardWidth / 2;
                         const finalX = startX + i * (cardWidth + gap);
-
-                        // Interpolate from center (0) to final position
                         const translateX = spreadProgress * finalX;
-
-                        // Shadow offset when stacked
                         const shadowOffset = (1 - spreadProgress) * i * 8;
-
-                        // Scale for depth
-                        const scale = 1 - (1 - spreadProgress) * 0.03 * i;
-
-                        // Z-index
+                        const scale = (1 - (1 - spreadProgress) * 0.03 * i) * scaleFactor;
                         const zIndex = spreadProgress > 0.5 ? 1 : (totalCards - i);
+
+                        // 2. Apply Styles based on mode
+                        const style = isMobile ? {
+                            position: 'relative',
+                            transform: 'none',
+                            zIndex: 1,
+                            width: '100%',
+                            maxWidth: '360px',
+                            minHeight: 'auto',
+                            padding: '48px 40px 32px',
+                        } : {
+                            position: 'absolute',
+                            transform: `translateX(${translateX}px) translateY(${shadowOffset}px) scale(${scale})`,
+                            zIndex: zIndex,
+                            width: `${cardWidth}px`,
+                            minHeight: `${480 * scaleFactor}px`,
+                            padding: `${48 * scaleFactor}px ${40 * scaleFactor}px ${32 * scaleFactor}px`
+                        };
 
                         return (
                             <div
                                 key={i}
                                 className={`feature-card feature-${feature.color}`}
-                                style={{
-                                    transform: `translateX(${translateX}px) translateY(${shadowOffset}px) scale(${scale})`,
-                                    zIndex,
-                                }}
+                                style={style}
                             >
                                 {/* Icon Badge */}
                                 <span className="feature-icon">{feature.icon}</span>
@@ -376,7 +419,7 @@ function LandingPage() {
                 <div className={`cta-content ${ctaVisible ? 'visible' : ''}`}>
                     <h2>Ready to feel more understood?</h2>
                     <p>Start your free 14-day trial. No credit card needed.</p>
-                    <button className="btn-primary btn-large">
+                    <button className="btn-primary btn-large" onClick={handleStart}>
                         Begin Your Journey
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
