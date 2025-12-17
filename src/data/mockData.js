@@ -104,10 +104,91 @@ export const mockCopingSuggestions = {
             duration: '5 mins',
             type: 'reflection',
             icon: '✨'
+        },
+        {
+            id: '5',
+            title: 'Worry Time Capsule',
+            description: 'Seal a worry away and check back later. Prove your fears wrong.',
+            duration: '2 mins',
+            type: 'tool',
+            icon: '💊'
+        },
+        {
+            id: '6',
+            title: 'Check Energy Battery',
+            description: 'Visualize your daily load and prevent burnout before it happens.',
+            duration: '1 min',
+            type: 'tool',
+            icon: '🔋'
         }
     ],
     reasoning: 'Based on your current mood and stress levels, these activities can help you feel more balanced.'
 };
+
+// ============================================================================
+// WORRY CAPSULE DATA
+// ============================================================================
+export const mockWorries = [
+    {
+        id: '101',
+        text: "I'm going to mess up the project demo in front of the judges.",
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+        status: 'pending',
+        didHappen: null
+    },
+    {
+        id: '102',
+        text: "I won't be able to finish the feature in time.",
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+        status: 'resolved',
+        didHappen: false,
+        resolvedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        id: '103',
+        text: "My laptop battery will die during the coding session.",
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'resolved',
+        didHappen: false,
+        resolvedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+    }
+];
+
+// ============================================================================
+// GRATITUDE GARDEN DATA
+// ============================================================================
+export const mockGardenFlowers = [
+    {
+        id: '201',
+        text: "The smell of rain this morning.",
+        type: 'A',
+        color: '#F4D35E',
+        x: 20,
+        y: 80,
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        scale: 1
+    },
+    {
+        id: '202',
+        text: "My partner made me coffee.",
+        type: 'C',
+        color: '#F27A5E',
+        x: 50,
+        y: 70,
+        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        scale: 1
+    },
+    {
+        id: '203',
+        text: "Finished a difficult task at work.",
+        type: 'B',
+        color: '#B8A9C9',
+        x: 80,
+        y: 85,
+        createdAt: new Date().toISOString(),
+        scale: 1
+    }
+];
 
 // ============================================================================
 // CALENDAR MOOD DATA

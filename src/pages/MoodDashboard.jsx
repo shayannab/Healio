@@ -29,7 +29,11 @@ function getGreeting() {
     return 'Good Evening';
 }
 
+import { useNavigate } from 'react-router-dom';
+// ... imports
+
 function MoodDashboard() {
+    const navigate = useNavigate();
     const [activeNav, setActiveNav] = useState('dashboard');
     const [moodData, setMoodData] = useState(mockMoodData);
     const [stressData, setStressData] = useState(mockStressData);
@@ -47,7 +51,26 @@ function MoodDashboard() {
     // Handle activity selection
     const handleSelectActivity = (activity) => {
         console.log('Activity selected:', activity);
-        // In real app: open activity modal or navigate
+
+        // Link "Box Breathing" (ID: 2) to the game
+        if (activity.id === '2' || activity.title.includes('Breathing')) {
+            navigate('/games/breath-bubble');
+        }
+
+        // Link "Worry Time Capsule" (ID: 5)
+        if (activity.id === '5' || activity.title.includes('Capsule')) {
+            navigate('/games/worry-capsule');
+        }
+
+        // Link "Energy Battery" (ID: 6)
+        if (activity.id === '6' || activity.title.includes('Battery')) {
+            navigate('/games/energy-battery');
+        }
+
+        // Link "Gratitude Garden" (ID: 4)
+        if (activity.id === '4' || activity.title.includes('Gratitude')) {
+            navigate('/games/gratitude-garden');
+        }
     };
 
     // Render right sidebar content
