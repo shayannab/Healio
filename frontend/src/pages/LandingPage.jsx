@@ -3,7 +3,7 @@
  * Cozy wellness vibes with sophisticated polish
  */
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/components/LandingPage.css';
 
 // ... (keep existing hook code)
@@ -182,7 +182,10 @@ function LandingPage() {
                     <a href="#how">How It Works</a>
                     <a href="#testimonials">Stories</a>
                 </div>
-                <button className="nav-cta" onClick={handleStart}>Start Your Journey</button>
+                <div className="nav-actions">
+                    <Link to="/login" className="nav-login">Login</Link>
+                    <button className="nav-cta" onClick={handleStart}>Start Your Journey</button>
+                </div>
             </nav>
 
             {/* Hero */}
