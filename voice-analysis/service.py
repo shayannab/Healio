@@ -97,18 +97,23 @@ async def analyze_audio_service(file_path: str):
             else:
                 insight = "Quiet / Reserved"
         elif energy > 0.08:
-            if pitch_var > 40:
+            # Tuned Thresholds based on user feedback (Excitement vs Stress)
+            if pitch_var > 30: # Lowered from 40 to catch more excitement
                 insight = "Excited / Highly Expressive"
-            elif pitch_mean > 180: # High pitch + Loud
-                insight = "High Intensity / Stressed"
+            elif pitch_mean > 210: # Raised from 180 (Stress usually very high pitch)
+                insight = "High Intensity" # Removed "Stressed" to avoid false negatives
             else:
                 insight = "Energetic"
         else:
             # Moderate Energy
             if pitch_var < 15:
                 insight = "Monotone / Flat"
-            elif speed > 0.6:
-                insight = "Rushed / Anxious"
+            elif speed > 0.7:
+                # Differentiate Anxiety vs Excitement using Pitch Var
+                if pitch_var > 20: 
+                    insight = "Animated / Eager"
+                else: 
+                    insight = "Rushed / Anxious"
             elif speed < 0.35 and pitch_var < 25:
                 insight = "Calm / Relaxed"
 

@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { Hand } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import MoodWaveGraph from '../components/dashboard/MoodWaveGraph';
 import QuickCheckin from '../components/dashboard/QuickCheckin';
@@ -17,8 +18,7 @@ import {
     mockMoodData,
     mockStressData,
     mockBurnoutData,
-    mockCopingSuggestions,
-    mockJournalEntries
+    mockCopingSuggestions
 } from '../data/mockData';
 
 // Greeting helper
@@ -32,6 +32,10 @@ function getGreeting() {
 import { useNavigate } from 'react-router-dom';
 // ... imports
 
+import { moodAPI, journalAPI } from '../services/api';
+
+// ... imports
+
 function MoodDashboard() {
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -40,13 +44,30 @@ function MoodDashboard() {
     const [stressData, setStressData] = useState(mockStressData);
     const [burnoutData, setBurnoutData] = useState(mockBurnoutData);
     const [copingData, setCopingData] = useState(mockCopingSuggestions);
-    const [journalEntries, setJournalEntries] = useState(mockJournalEntries);
-    // User is now coming from AuthContext
+    const [journalEntries, setJournalEntries] = useState([]);
+    const [selectedEntry, setSelectedEntry] = useState(null);
+
+    // Fetch data on mount
+    useEffect(() => {
+        fetchRecentJournals();
+    }, []);
+
+    const fetchRecentJournals = async () => {
+        try {
+            const result = await journalAPI.getRecentJournals();
+            if (result && result.entries) {
+                setJournalEntries(result.entries);
+            }
+        } catch (error) {
+            console.error("Failed to load journals:", error);
+        }
+    };
 
     // Handle mood logging
     const handleMoodLogged = (moodEntry) => {
         console.log('Mood logged:', moodEntry);
-        // In real app: update mood data, refresh dashboard
+        // Refresh dashboard data
+        fetchRecentJournals();
     };
 
     // Handle activity selection
@@ -95,7 +116,9 @@ function MoodDashboard() {
             {/* Greeting Header */}
             <header className="greeting">
                 <h1>
-                    <span className="greeting-wave">👋</span>
+                    <span className="greeting-wave" style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: '10px' }}>
+                        <Hand size={32} color="#4F46E5" />
+                    </span>
                     {getGreeting()}, {user?.name || 'there'}
                 </h1>
                 <p>Let's check in on how you're feeling today.</p>
@@ -113,9 +136,36 @@ function MoodDashboard() {
             {/* Recent Journal Entries */}
             <JournalEntries
                 entries={journalEntries}
-                onViewEntry={(entry) => console.log('View entry:', entry)}
+                onViewEntry={(entry) => setSelectedEntry(entry)}
                 onViewAll={() => console.log('View all journals')}
             />
+
+            {/* Entry Detail Modal */}
+            {selectedEntry && (
+                <div className="modal-overlay" style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center'
+                }} onClick={() => setSelectedEntry(null)}>
+                    <div className="modal-content" style={{
+                        backgroundColor: 'white', padding: '2rem', borderRadius: '16px',
+                        maxWidth: '500px', width: '90%', maxHeight: '80vh', overflowY: 'auto',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.2)'
+                    }} onClick={e => e.stopPropagation()}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                            <h3 style={{ margin: 0 }}>Journal Entry</h3>
+                            <button onClick={() => setSelectedEntry(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>×</button>
+                        </div>
+                        <div style={{ marginBottom: '1rem', color: '#666', fontSize: '0.9rem' }}>
+                            {new Date(selectedEntry.date).toLocaleString()} • <span style={{ textTransform: 'capitalize' }}>{selectedEntry.mood}</span>
+                        </div>
+                        <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+                            {selectedEntry.content || selectedEntry.preview}
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {/* Floating Action Button */}
             <button

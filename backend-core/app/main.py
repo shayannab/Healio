@@ -11,6 +11,8 @@ from app.common.exceptions import MoodFlowException
 from app.auth.routes import router as auth_router
 from app.users.routes import router as users_router
 from app.mental_insights.routes import router as insights_router
+from app.mental_insights.mood_routes import router as mood_router
+from app.mental_insights.journal_routes import router as journal_router
 from app.consent.routes import router as consent_router
 from app.counselor.routes import router as counselor_router
 from app.analytics.routes import router as analytics_router
@@ -71,7 +73,10 @@ app.include_router(auth_router, prefix="/api/v1/auth", tags=["1. Identity & Auth
 app.include_router(users_router, prefix="/api/v1/users", tags=["2. User Profiles"])
 
 # 2. Intelligence & Data Ingestion (The Silent Observer)
+# 2. Intelligence & Data Ingestion (The Silent Observer)
 app.include_router(insights_router, prefix="/api/v1/insights", tags=["3. Clinical Insights"])
+app.include_router(mood_router, prefix="/api/v1/mood", tags=["3b. Mood Tracking"])
+app.include_router(journal_router, prefix="/api/v1/journal", tags=["3c. Journaling"])
 
 # 3. Governance & Trust (The Blockchain Bridge)
 app.include_router(consent_router, prefix="/api/v1/consent", tags=["4. Consent & Blockchain"])

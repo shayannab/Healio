@@ -4,14 +4,15 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { logMood } from '../../services/api';
+import { Frown, Meh, Smile, Laugh, AlertCircle, Mic } from 'lucide-react';
 import '../../styles/components/QuickCheckin.css';
 
 const moodOptions = [
-    { id: 'sad', emoji: '😢', label: 'Sad' },
-    { id: 'anxious', emoji: '😰', label: 'Anxious' },
-    { id: 'neutral', emoji: '😐', label: 'Neutral' },
-    { id: 'good', emoji: '🙂', label: 'Good' },
-    { id: 'happy', emoji: '😊', label: 'Happy' }
+    { id: 'sad', icon: <Frown size={28} />, label: 'Sad' },
+    { id: 'anxious', icon: <AlertCircle size={28} />, label: 'Anxious' },
+    { id: 'neutral', icon: <Meh size={28} />, label: 'Neutral' },
+    { id: 'good', icon: <Smile size={28} />, label: 'Good' },
+    { id: 'happy', icon: <Laugh size={28} />, label: 'Happy' }
 ];
 
 import VoiceRecorder from '../common/VoiceRecorder';
@@ -69,6 +70,7 @@ function QuickCheckin({ onMoodLogged }) {
         } catch (error) {
             console.error('Failed to log mood:', error);
             setSubmitStatus('error');
+            alert("Check-in Failed! 🛑\n\nIs the Backend Server running on Port 8000?\nCode: " + error.message);
         } finally {
             setIsSubmitting(false);
         }
@@ -92,7 +94,7 @@ function QuickCheckin({ onMoodLogged }) {
                         transition: 'background 0.2s'
                     }}
                 >
-                    🎙️
+                    <Mic size={24} />
                 </button>
             </div>
 
@@ -112,7 +114,7 @@ function QuickCheckin({ onMoodLogged }) {
                         aria-label={`Select ${option.label} mood`}
                     >
                         <div className={`emoji-face ${option.id}`}>
-                            {option.emoji}
+                            {option.icon}
                         </div>
                         <span className="emoji-label">{option.label}</span>
                     </button>

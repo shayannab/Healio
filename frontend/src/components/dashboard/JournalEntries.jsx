@@ -2,14 +2,15 @@
  * JournalEntries Component
  * Displays recent journal entries with mood indicators
  */
+import { Frown, Meh, Smile, Laugh, AlertCircle, ArrowRight } from 'lucide-react';
 import '../../styles/components/JournalEntries.css';
 
-const moodEmojis = {
-    sad: '😔',
-    anxious: '😰',
-    neutral: '😐',
-    good: '🙂',
-    happy: '😊'
+const moodIcons = {
+    sad: <Frown size={24} />,
+    anxious: <AlertCircle size={24} />,
+    neutral: <Meh size={24} />,
+    good: <Smile size={24} />,
+    happy: <Laugh size={24} />
 };
 
 function JournalEntries({ entries = [], onViewEntry, onViewAll }) {
@@ -49,9 +50,7 @@ function JournalEntries({ entries = [], onViewEntry, onViewAll }) {
                 <h2 className="card-title">Recent Journal Entries</h2>
                 <button className="card-action" onClick={onViewAll}>
                     View All
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ArrowRight size={16} />
                 </button>
             </div>
 
@@ -63,7 +62,7 @@ function JournalEntries({ entries = [], onViewEntry, onViewAll }) {
                         onClick={() => onViewEntry?.(entry)}
                     >
                         <div className={`entry-mood ${entry.mood}`}>
-                            {moodEmojis[entry.mood] || '😐'}
+                            {moodIcons[entry.mood] || <Meh size={24} />}
                         </div>
                         <div className="entry-content">
                             <div className="entry-date">{formatDate(entry.date)}</div>

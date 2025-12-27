@@ -19,10 +19,10 @@
 // ============================================================================
 // CONFIGURATION - UPDATE THIS FOR PRODUCTION
 // ============================================================================
-const API_BASE = '/api';  // Change to your backend URL, e.g., 'http://localhost:8000/api'
+const API_BASE = 'http://localhost:8000/api/v1';
 
 // Toggle between mock and real data
-const USE_MOCK_DATA = true;  // Set to false when backend is ready
+const USE_MOCK_DATA = false;  // Set to false when backend is ready
 
 // ============================================================================
 // MOCK DATA IMPORT (Remove when connecting to real backend)
@@ -112,221 +112,73 @@ export async function getMoodAnalytics() {
  *   }
  * }
  */
+// LocalStorage Service (Replaces Backend Core)
+import { storageService } from './storage';
+
+// ... (existing helper functions) ...
+
+/**
+ * POST /api/mood/log
+ * Logs a new mood entry (Now Uses LocalStorage)
+ */
 export async function logMood(moodData) {
-    if (USE_MOCK_DATA) {
-        console.log('Mock: Logging mood', moodData);
-        return { success: true, entryId: 'mock-' + Date.now() };
-    }
-    return fetchAPI('/mood/log', {
-        method: 'POST',
-        body: JSON.stringify(moodData)
-    });
+    console.log("Logging mood to LocalStorage:", moodData);
+    // Simulate network delay for realism
+    await new Promise(r => setTimeout(r, 300));
+
+    // Save to Browser Storage
+    return storageService.saveMoodLog(moodData);
 }
 
 // ============================================================================
 // STRESS TRACKING API
 // ============================================================================
 
-/**
- * GET /api/stress
- * 
- * Fetches stress and anxiety level data
- * 
- * BACKEND RESPONSE FORMAT:
- * {
- *   currentLevel: number (1-10),
- *   weeklyAverage: number,
- *   weeklyData: [
- *     { day: 'Mon', level: 5, anxiety: 4 },
- *     ...
- *   ],
- *   peakTime: string (e.g., 'Wednesday afternoon'),
- *   triggers: string[] (detected from journal/chat)
- * }
- */
 export async function getStressLevels() {
-    if (USE_MOCK_DATA) {
-        return mockStressData;
-    }
-    return fetchAPI('/stress');
+    return mockStressData;
 }
 
-/**
- * POST /api/stress/log
- * 
- * Logs current stress level
- * 
- * REQUEST BODY:
- * {
- *   level: number (1-10),
- *   context: string (optional),
- *   timestamp: ISO date string
- * }
- */
 export async function logStress(stressData) {
-    if (USE_MOCK_DATA) {
-        console.log('Mock: Logging stress', stressData);
-        return { success: true };
-    }
-    return fetchAPI('/stress/log', {
-        method: 'POST',
-        body: JSON.stringify(stressData)
-    });
+    console.log('Mock: Logging stress', stressData);
+    return { success: true };
 }
 
 // ============================================================================
 // BURNOUT RISK API
 // ============================================================================
 
-/**
- * GET /api/burnout
- * 
- * Fetches burnout risk assessment
- * 
- * BACKEND RESPONSE FORMAT:
- * {
- *   riskLevel: 'low' | 'medium' | 'high' | 'critical',
- *   riskPercentage: number (0-100),
- *   factors: [
- *     { name: 'Work Hours', impact: 'high' },
- *     { name: 'Sleep Quality', impact: 'medium' },
- *     ...
- *   ],
- *   trend: 'improving' | 'stable' | 'worsening',
- *   lastUpdated: ISO date string
- * }
- * 
- * ML MODEL INTEGRATION:
- * - Uses historical mood, stress, journal data
- * - Predicts burnout risk using trained model
- * - Updates weekly or when significant changes detected
- */
 export async function getBurnoutRisk() {
-    if (USE_MOCK_DATA) {
-        return mockBurnoutData;
-    }
-    return fetchAPI('/burnout');
+    return mockBurnoutData;
 }
 
 // ============================================================================
-// COPING SUGGESTIONS API (RAG-POWERED)
+// COPING SUGGESTIONS API
 // ============================================================================
 
-/**
- * GET /api/coping?mood={mood}&stress={stressLevel}
- * 
- * Fetches personalized coping suggestions
- * 
- * QUERY PARAMS:
- * - mood: current mood state
- * - stress: current stress level (1-10)
- * 
- * BACKEND RESPONSE FORMAT (RAG-powered):
- * {
- *   suggestions: [
- *     {
- *       id: string,
- *       title: string,
- *       description: string,
- *       duration: string (e.g., '5 minutes'),
- *       type: 'breathing' | 'activity' | 'reflection' | 'grounding',
- *       icon: string
- *     }
- *   ],
- *   reasoning: string (why these suggestions were selected)
- * }
- * 
- * RAG INTEGRATION:
- * - Retrieves relevant coping strategies from knowledge base
- * - Personalizes based on user's mood patterns and preferences
- * - Uses vector similarity to find most relevant strategies
- */
 export async function getCopingSuggestions(mood, stressLevel) {
-    if (USE_MOCK_DATA) {
-        return mockCopingSuggestions;
-    }
-    return fetchAPI(`/coping?mood=${mood}&stress=${stressLevel}`);
+    return mockCopingSuggestions;
 }
 
 // ============================================================================
-// CHAT API (AI ASSISTANT)
+// CHAT API
 // ============================================================================
 
-/**
- * POST /api/chat
- * 
- * Sends message to AI chat assistant
- * 
- * REQUEST BODY:
- * {
- *   message: string,
- *   conversationId: string (optional, for context)
- * }
- * 
- * BACKEND RESPONSE FORMAT:
- * {
- *   response: string (AI-generated supportive message),
- *   emotionAnalysis: {
- *     emotion: string,
- *     confidence: number,
- *     stressIndicator: number (1-10)
- *   },
- *   triggerAlert: boolean (true if crisis keywords detected),
- *   suggestedResources: string[] (optional)
- * }
- * 
- * ML/RAG INTEGRATION:
- * - Emotion classification model analyzes message
- * - RAG retrieves relevant supportive content
- * - Crisis detection for SOS triggering
- */
 export async function sendChatMessage(message, conversationId = null) {
-    if (USE_MOCK_DATA) {
-        return {
-            response: "I hear you. It's okay to feel this way. Would you like to talk more about what's on your mind?",
-            emotionAnalysis: { emotion: 'neutral', confidence: 0.75, stressIndicator: 4 },
-            triggerAlert: false
-        };
-    }
-    return fetchAPI('/chat', {
-        method: 'POST',
-        body: JSON.stringify({ message, conversationId })
-    });
+    return {
+        response: "I hear you. It's okay to feel this way. Would you like to talk more about what's on your mind?",
+        emotionAnalysis: { emotion: 'neutral', confidence: 0.75, stressIndicator: 4 },
+        triggerAlert: false
+    };
 }
-
-// ============================================================================
-// JOURNAL API
-// ============================================================================
 
 /**
  * GET /api/journal/recent
- * 
- * Fetches recent journal entries
- * 
- * BACKEND RESPONSE FORMAT:
- * {
- *   entries: [
- *     {
- *       id: string,
- *       date: ISO date string,
- *       preview: string (first 100 chars),
- *       mood: string,
- *       tags: string[],
- *       hasDistress: boolean
- *     }
- *   ]
- * }
+ * Fetches recent journal entries (Now Uses LocalStorage)
  */
 export async function getRecentJournals() {
-    if (USE_MOCK_DATA) {
-        return {
-            entries: [
-                { id: '1', date: new Date().toISOString(), preview: 'Today was challenging but...', mood: 'neutral', tags: ['work'], hasDistress: false },
-                { id: '2', date: new Date(Date.now() - 86400000).toISOString(), preview: 'Feeling better after...', mood: 'good', tags: ['self-care'], hasDistress: false }
-            ]
-        };
-    }
-    return fetchAPI('/journal/recent');
+    // Fetch from Browser Storage
+    const recent = storageService.getRecentJournals(10);
+    return { entries: recent };
 }
 
 /**

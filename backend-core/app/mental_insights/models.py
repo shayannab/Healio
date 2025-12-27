@@ -17,3 +17,17 @@ class MLInsight(Base):
     transcript = Column(Text, nullable=True)
     acoustic_signals = Column(JSON, nullable=True) # Stores {energy, speed, pitch}
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class MoodLog(Base):
+    __tablename__ = "mood_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True) # Linked to User.id
+    mood = Column(String) # 'happy', 'sad', etc.
+    note = Column(Text, nullable=True)
+    
+    # Optional: store voice analysis result here directly if part of the log
+    transcript = Column(Text, nullable=True)
+    acoustic_signals = Column(JSON, nullable=True)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
