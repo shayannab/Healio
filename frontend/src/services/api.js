@@ -1,8 +1,10 @@
 /**
  * ============================================================================
- * MOODFLOW UNIFIED API SERVICE - FINAL PRODUCTION
+ * MOODFLOW UNIFIED API SERVICE (v3.0.0)
  * ============================================================================
  */
+import { storageService } from './storage';
+import { mockMoodData, mockStressData, mockBurnoutData, mockCopingSuggestions } from '../data/mockData';
 
 const CORE_BASE = 'http://localhost:8000/api/v1'; // FastAPI Core
 const AI_BASE = 'http://localhost:5000';         // Flask NLP Engine
@@ -34,7 +36,7 @@ async function fetchCore(endpoint, options = {}) {
 export const authAPI = {
     login: async (credentials) => {
         const formData = new URLSearchParams();
-        formData.append('username', credentials.email); 
+        formData.append('username', credentials.email);
         formData.append('password', credentials.password);
 
         const response = await fetch(`${CORE_BASE}/auth/login`, {
@@ -42,7 +44,7 @@ export const authAPI = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData
         });
-        
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || "Invalid credentials");
         if (data.access_token) {
@@ -105,24 +107,55 @@ export const voiceAPI = {
 // 🧠 CHAT API (Flask Port 5000)
 // ============================================================================
 export const chatAPI = {
+    /**
+     * Hits the Flask AI server directly for low-latency RAG response.
+     */
     sendMessage: async (message) => {
         const response = await fetch(`${AI_BASE}/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message }) //
         });
+
         const data = await response.json();
-        return data;
+        if (!response.ok) throw new Error(data.error || "AI Brain Offline");
+        return data; // Returns { response: "..." }
     }
 };
 
-// Default export for all-in-one access
+// ============================================================================
+// 📊 CLINICAL INSIGHTS & ANALYTICS (FASTAPI)
+// ============================================================================
+
+export const insightAPI = {
+    // For your "Amazing Looking Table"
+    fetchAllInsights: () => fetchCore('/insights/all'),
+
+    // For historical charts
+    getMoodHistory: () => fetchCore('/insights/history'),
+
+    getStressTrends: () => fetchCore('/insights/stress-trends'),
+
+    getBurnoutRisk: () => fetchCore('/analytics/burnout-assessment')
+};
+
+// ============================================================================
+// 🚨 EMERGENCY & SOS (FASTAPI)
+// ============================================================================
+
+export const sosAPI = {
+    trigger: (data) => fetchCore('/sos/trigger', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+};
+
+// Unified Export
 export const api = {
     auth: authAPI,
-    mood: moodAPI,
-    journal: journalAPI,
-    voice: voiceAPI,
-    chat: chatAPI
+    chat: chatAPI,
+    insights: insightAPI,
+    sos: sosAPI
 };
 
 export default api;

@@ -30,7 +30,7 @@ def get_recent_journals(db: Session = Depends(get_db)):
         entry = {
             "id": str(log.id),
             "date": log.created_at.isoformat(),
-            "date": log.created_at.isoformat(),
+
             "preview": preview,
             "content": content, # Full text for expansion
             "mood": log.mood,
