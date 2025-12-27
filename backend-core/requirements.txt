@@ -1,0 +1,17 @@
+# Web Framework
+fastapi
+uvicorn
+
+# Database & ORM
+sqlalchemy
+aiosqlite
+
+# Security & Identity
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+python-dotenv
+
+# Validation & Utilities
+pydantic[email]
+requests
