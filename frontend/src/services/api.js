@@ -520,8 +520,54 @@ export const reportAPI = {
     getWeeklyReport
 };
 
+// ============================================================================
+// VOICE ANALYSIS API (Microservice)
+// ============================================================================
+
+/**
+ * POST http://localhost:8001/analyze
+ * 
+ * Sends audio blob to the standalone Voice Analysis Microservice
+ * 
+ * REQUEST BODY: Multipart Form Data
+ * - file: Audio Blob
+ * 
+ * RESPONSE:
+ * {
+ *   success: true,
+ *   data: {
+ *     transcript: "...",
+ *     signals: { energy: 0.5, ... },
+ *     insight: "..."
+ *   }
+ * }
+ */
+export async function analyzeVoiceLog(audioBlob) {
+    // FORCE REAL API FOR VOICE (Microservice is running)
+    // if (USE_MOCK_DATA) { ... } // Bypassed for Voice
+
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'voice_log.wav');
+
+    // Direct call to Microservice Port 8001
+    const response = await fetch('http://localhost:8001/analyze', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(`Voice Service Error: ${response.status}`);
+    }
+
+    return await response.json();
+}
+
 export const sosAPI = {
     triggerSOS
+};
+
+export const voiceAPI = {
+    analyzeVoiceLog
 };
 
 // Default export for convenience
@@ -534,6 +580,7 @@ export const api = {
     journal: journalAPI,
     report: reportAPI,
     sos: sosAPI,
+    voice: voiceAPI,
     auth: {
         login,
         signup

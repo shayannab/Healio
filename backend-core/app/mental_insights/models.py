@@ -13,4 +13,7 @@ class MLInsight(Base):
     clinical_summary = Column(Text)
     # JSON type allows us to store the list of themes (e.g., ["Stress", "Exams"])
     themes = Column(JSON) 
+    # Voice Analysis Data
+    transcript = Column(Text, nullable=True)
+    acoustic_signals = Column(JSON, nullable=True) # Stores {energy, speed, pitch}
     created_at = Column(DateTime, default=datetime.utcnow)

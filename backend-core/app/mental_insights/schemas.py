@@ -6,7 +6,9 @@ class MLInsightCreate(BaseModel):
     dominant_emotion: str
     risk_level: str
     clinical_summary: str
-    themes: List[str]  # Ensure this is defined as a List
+    themes: List[str]
+    transcript: Optional[str] = None
+    acoustic_signals: Optional[dict] = None
 
 class MLInsightResponse(MLInsightCreate):
     id: int

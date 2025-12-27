@@ -14,12 +14,15 @@ const moodOptions = [
     { id: 'happy', emoji: '😊', label: 'Happy' }
 ];
 
+import VoiceRecorder from '../common/VoiceRecorder';
+
 function QuickCheckin({ onMoodLogged }) {
     const [selectedMood, setSelectedMood] = useState(null);
     const [note, setNote] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
     const textareaRef = useRef(null);
 
     useEffect(() => {
@@ -31,6 +34,15 @@ function QuickCheckin({ onMoodLogged }) {
     const handleMoodSelect = (mood) => {
         setSelectedMood(mood);
         setIsExpanded(true);
+    };
+
+    const handleVoiceAnalysis = (data) => {
+        // Auto-expand
+        setIsExpanded(true);
+        // Append transcript and insight to note
+        const voiceNote = `${data.transcript}\n\n[Voice Signal: ${data.insight}]`;
+        setNote(prev => prev ? `${prev}\n\n${voiceNote}` : voiceNote);
+        setShowVoiceRecorder(false);
     };
 
     const handleSubmit = async () => {
@@ -64,7 +76,32 @@ function QuickCheckin({ onMoodLogged }) {
 
     return (
         <section className="card checkin-card">
-            <h2 className="checkin-question">How are you feeling right now?</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h2 className="checkin-question" style={{ margin: 0 }}>How are you feeling right now?</h2>
+                <button
+                    onClick={() => setShowVoiceRecorder(!showVoiceRecorder)}
+                    className="icon-btn"
+                    title="Log with Voice"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                        padding: '8px',
+                        borderRadius: '50%',
+                        transition: 'background 0.2s'
+                    }}
+                >
+                    🎙️
+                </button>
+            </div>
+
+            {showVoiceRecorder && (
+                <div style={{ marginBottom: '20px', padding: '15px', background: 'var(--bg-cream)', borderRadius: '12px', border: '1px solid var(--sage-soft)' }}>
+                    <h4 style={{ margin: '0 0 10px 0', fontSize: '0.9rem', color: 'var(--sage)' }}>Record a short voice note (30s)</h4>
+                    <VoiceRecorder onAnalysisComplete={handleVoiceAnalysis} />
+                </div>
+            )}
 
             <div className="emoji-selector">
                 {moodOptions.map((option) => (
