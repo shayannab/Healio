@@ -3,6 +3,7 @@
  * Main dashboard view combining all mood tracking components
  */
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import MoodWaveGraph from '../components/dashboard/MoodWaveGraph';
 import QuickCheckin from '../components/dashboard/QuickCheckin';
@@ -17,8 +18,7 @@ import {
     mockStressData,
     mockBurnoutData,
     mockCopingSuggestions,
-    mockJournalEntries,
-    mockUserData
+    mockJournalEntries
 } from '../data/mockData';
 
 // Greeting helper
@@ -34,13 +34,14 @@ import { useNavigate } from 'react-router-dom';
 
 function MoodDashboard() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [activeNav, setActiveNav] = useState('dashboard');
     const [moodData, setMoodData] = useState(mockMoodData);
     const [stressData, setStressData] = useState(mockStressData);
     const [burnoutData, setBurnoutData] = useState(mockBurnoutData);
     const [copingData, setCopingData] = useState(mockCopingSuggestions);
     const [journalEntries, setJournalEntries] = useState(mockJournalEntries);
-    const [user] = useState(mockUserData);
+    // User is now coming from AuthContext
 
     // Handle mood logging
     const handleMoodLogged = (moodEntry) => {

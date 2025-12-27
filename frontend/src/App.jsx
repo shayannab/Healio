@@ -13,20 +13,24 @@ import GratitudeGarden from './components/games/GratitudeGarden';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 
+import { AuthProvider } from './context/AuthContext';
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<MoodDashboard />} />
-        <Route path="/games/breath-bubble" element={<BreathBubble />} />
-        <Route path="/games/worry-capsule" element={<WorryTimeCapsule />} />
-        <Route path="/games/energy-battery" element={<EnergyBattery />} />
-        <Route path="/games/gratitude-garden" element={<GratitudeGarden />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<MoodDashboard />} />
+          <Route path="/games/breath-bubble" element={<BreathBubble />} />
+          <Route path="/games/worry-capsule" element={<WorryTimeCapsule />} />
+          <Route path="/games/energy-battery" element={<EnergyBattery />} />
+          <Route path="/games/gratitude-garden" element={<GratitudeGarden />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider >
   );
 }
 

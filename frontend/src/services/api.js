@@ -441,6 +441,51 @@ export async function triggerSOS(data) {
 }
 
 // ============================================================================
+// AUTH API
+// ============================================================================
+
+export async function login(credentials) {
+    if (USE_MOCK_DATA) {
+        // Simulating API call
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    user: {
+                        name: 'Demo User',
+                        email: credentials.email,
+                        avatar: 'D'
+                    }
+                });
+            }, 500);
+        });
+    }
+    return fetchAPI('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(credentials)
+    });
+}
+
+export async function signup(userData) {
+    if (USE_MOCK_DATA) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    user: {
+                        name: userData.name || 'New User',
+                        email: userData.email,
+                        avatar: userData.name ? userData.name[0].toUpperCase() : 'N'
+                    }
+                });
+            }, 500);
+        });
+    }
+    return fetchAPI('/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify(userData)
+    });
+}
+
+// ============================================================================
 // EXPORT ALL APIs
 // ============================================================================
 export const moodAPI = {
@@ -477,3 +522,20 @@ export const reportAPI = {
 export const sosAPI = {
     triggerSOS
 };
+
+// Default export for convenience
+export const api = {
+    mood: moodAPI,
+    stress: stressAPI,
+    burnout: burnoutAPI,
+    coping: copingAPI,
+    chat: chatAPI,
+    journal: journalAPI,
+    report: reportAPI,
+    sos: sosAPI,
+    auth: {
+        login,
+        signup
+    }
+};
+
