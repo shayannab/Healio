@@ -1,12 +1,45 @@
+import httpx
 from sqlalchemy.orm import Session
 from app.mental_insights import models, schemas
+import os
+
+# --- INTEGRATION CONFIGURATION ---
+# Points to the Flask AI Backend (port 5001)
+AI_BACKEND_URL = os.getenv("AI_BACKEND_URL", "http://localhost:5001/chat")
+
+async def get_ai_chat_response(message: str):
+    """
+    SERVER-TO-SERVER BRIDGE:
+    Calls the Flask AI engine to get RAG-based response and NLP analysis.
+    """
+    try:
+        async with httpx.AsyncClient() as client:
+            # Send message to Spandan's Flask server
+            response = await client.post(
+                AI_BACKEND_URL,
+                json={"message": message},
+                timeout=30.0  # RAG over 420k entries takes time
+            )
+            
+            if response.status_code == 200:
+                return response.json() 
+            
+    except Exception as e:
+        print(f"DEBUG ERROR: Connection to Backend-AI failed: {str(e)}")
+    
+    # Fallback if AI server is down
+    return {
+        "response": "I'm here for you, but I'm having trouble processing right now.",
+        "emotion": "neutral",
+        "risk": "low",
+        "summary": "AI Engine Offline",
+        "themes": []
+    }
 
 def save_ml_insight(db: Session, insight_data: schemas.MLInsightCreate):
     """
     Persists AI-generated analysis into the Silent Observer vault.
-    This function is called by the /push route.
     """
-    # Create the database object from the Pydantic schema
     db_insight = models.MLInsight(
         guest_id=insight_data.guest_id,
         dominant_emotion=insight_data.dominant_emotion,
@@ -23,7 +56,6 @@ def save_ml_insight(db: Session, insight_data: schemas.MLInsightCreate):
 def get_insights_by_guest(db: Session, guest_id: str):
     """
     Fetches all historical AI insights for a specific anonymous session.
-    Used by counselors to see trends.
     """
     return db.query(models.MLInsight).filter(models.MLInsight.guest_id == guest_id).all()
 

@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 
 from app.config.database import get_db
 from app.sos.service import trigger_sos_escalation
@@ -7,33 +8,75 @@ from app.mental_insights import service, schemas
 
 router = APIRouter()
 
-@router.post("/push", status_code=status.HTTP_201_CREATED)
+# ------------------------------------------------------------------
+# INGESTION ENDPOINT (Called by Backend-AI / ML Service)
+# ------------------------------------------------------------------
+
+@router.post(
+    "/push",
+    status_code=status.HTTP_201_CREATED,
+    response_model=schemas.MLInsightResponse
+)
 def push_ml_analysis(
     insight: schemas.MLInsightCreate,
     db: Session = Depends(get_db)
-    # Removed get_current_user to allow the ML Service to push data via guest_id
 ):
     """
-    Ingests AI Analysis. 
-    Secured by guest_id linkage rather than User JWT to maintain anonymity.
+    Ingests AI Analysis from the Backend-AI.
+    Triggers automated SOS if the risk level is 'high'.
     """
-    # 1. Save the ML insight to the database
+
     saved_insight = service.save_ml_insight(db, insight)
 
-    # 2. Automated Safety Governance: Bridge to SOS if Risk is 'High'
+    # Automated Safety Governance
     if insight.risk_level.lower() == "high":
-        sos_response = trigger_sos_escalation(
+        trigger_sos_escalation(
             db,
             guest_id=insight.guest_id,
             summary=f"AI AUTO-ESCALATION: {insight.clinical_summary}"
         )
-        return {
-            "success": True,
-            "data": saved_insight,
-            "emergency_alert": sos_response
-        }
 
-    return {
-        "success": True, 
-        "data": saved_insight
-    }
+    # Return ONLY the persisted insight (clean API contract)
+    return saved_insight
+
+
+# ------------------------------------------------------------------
+# TABLE / ANALYTICS ENDPOINTS (Frontend / Admin Dashboard)
+# ------------------------------------------------------------------
+
+@router.get(
+    "/all",
+    response_model=List[schemas.MLInsightResponse]
+)
+def get_all_vault_insights(
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    Fetches all clinical insights stored in the Identity Vault.
+    Used for analytics tables and admin dashboards.
+    """
+    return service.get_all_insights(db, limit=limit)
+
+
+@router.get(
+    "/session/{guest_id}",
+    response_model=List[schemas.MLInsightResponse]
+)
+def get_session_insights(
+    guest_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Fetches insights for a specific anonymous session.
+    Used when expanding a row in the analytics table.
+    """
+    insights = service.get_insights_by_guest(db, guest_id=guest_id)
+
+    if not insights:
+        raise HTTPException(
+            status_code=404,
+            detail="No insights found for this guest"
+        )
+
+    return insights

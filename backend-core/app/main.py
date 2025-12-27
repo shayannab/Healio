@@ -17,7 +17,7 @@ from app.consent.routes import router as consent_router
 from app.counselor.routes import router as counselor_router
 from app.analytics.routes import router as analytics_router
 from app.sos.routes import router as sos_router
-
+from app.sessions.routes import router as sessions_router
 # Initialize Database Tables
 # Automatically synchronizes the Identity Vault and Blockchain Ledger
 Base.metadata.create_all(bind=engine)
@@ -83,7 +83,7 @@ app.include_router(consent_router, prefix="/api/v1/consent", tags=["4. Consent &
 
 # 4. Safety & Response (The Crisis Layer)
 app.include_router(sos_router, prefix="/api/v1/sos", tags=["5. Emergency SOS"])
-
+app.include_router(sessions_router, prefix="/api/v1/sessions", tags=["Chat Sessions"])
 # 5. Professional Dashboards (The Consumer Layer)
 app.include_router(counselor_router, prefix="/api/v1/counselor", tags=["6. Counselor Dashboard"])
 app.include_router(analytics_router, prefix="/api/v1/analytics", tags=["7. Admin Analytics"])

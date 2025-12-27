@@ -1,0 +1,18 @@
+# Core dependencies
+numpy
+pandas
+scikit-learn
+nltk
+sentence-transformers
+
+# For conversational AI (optional but recommended)
+transformers
+torch
+
+# For MacOS compatibility and speed
+joblib
+threadpoolctl
+
+# For any web interface (if needed)
+flask
+flask-cors
