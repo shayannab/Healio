@@ -57,8 +57,7 @@ function Sidebar({ user, activeNav, onNavChange }) {
     return (
         <aside className="sidebar">
             <div className="sidebar-logo">
-                <div className="logo-icon">💚</div>
-                <span className="logo-text">Mood<span>Flow</span></span>
+                <h1 className="logo">Healio</h1>
             </div>
 
             <nav>

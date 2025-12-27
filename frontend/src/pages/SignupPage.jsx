@@ -8,7 +8,7 @@ function SignupPage() {
                 <div className="auth-header">
                     <span className="auth-logo">🌱</span>
                     <h1 className="auth-title">Create Account</h1>
-                    <p className="auth-subtitle">Start your mental wellness journey today</p>
+                    <p className="auth-subtitle">Join Healio and start your journey</p>
                 </div>
 
                 <form className="auth-form" onSubmit={(e) => e.preventDefault()}>

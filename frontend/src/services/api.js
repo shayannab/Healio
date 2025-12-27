@@ -1,9 +1,10 @@
 /**
  * ============================================================================
  * MOODFLOW API SERVICE
- * ============================================================================
+ * ============================================================================ * HEALIO API SERVICE
  * 
- * This file contains all API endpoints for the MoodFlow application.
+ * Mock API service for development without a backend.
+ * This file contains all API endpoints for the Healio application.
  * Currently using mock data - switch to real endpoints by updating API_BASE.
  * 
  * BACKEND INTEGRATION GUIDE:

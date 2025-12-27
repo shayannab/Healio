@@ -1,5 +1,5 @@
 /**
- * MoodFlow - Mental Health Dashboard
+ * Healio - Mental Health Dashboard
  * Main Application Entry Point
  */
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';

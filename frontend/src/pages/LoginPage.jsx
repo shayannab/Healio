@@ -29,7 +29,7 @@ function LoginPage() {
                 <div className="auth-header">
                     <span className="auth-logo">🌊</span>
                     <h1 className="auth-title">Welcome Back</h1>
-                    <p className="auth-subtitle">Sign in to your MoodFlow account</p>
+                    <p className="auth-subtitle">Sign in to your Healio account</p>
                 </div>
 
                 <form className="auth-form" onSubmit={handleSubmit}>

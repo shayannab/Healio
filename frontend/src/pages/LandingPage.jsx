@@ -107,7 +107,7 @@ function useCardSpreadAnimation() {
 
 // Data
 const testimonials = [
-    { text: "MoodFlow helped me understand patterns I never noticed. It feels like having a gentle guide.", name: "Sarah", role: "Designer" },
+    { text: "Healio helped me understand patterns I never noticed. It feels like having a gentle guide.", name: "Sarah", role: "Designer" },
     { text: "Finally, an app that feels warm and understanding. Not clinical, not childish—just right.", name: "Marcus", role: "Teacher" },
     { text: "The AI companion actually listens. It's become part of my daily wellness routine.", name: "Emily", role: "Writer" },
     { text: "Beautiful, calming, and genuinely helpful. This is what mental health apps should feel like.", name: "David", role: "Therapist" },
@@ -116,7 +116,7 @@ const testimonials = [
 const features = [
     {
         icon: "📊",
-        img: "/mood-illustration.png",
+        img: "/mood-illustrationsbr.png",
         title: "Mood Tracking",
         desc: "Beautiful visualizations reveal patterns in your emotions. Watch your journey unfold with intuitive charts and gentle insights.",
         highlights: ["Daily check-ins", "Pattern recognition", "Visual insights"],
@@ -124,7 +124,7 @@ const features = [
     },
     {
         icon: "📝",
-        img: "/journal-illustration.png",
+        img: "/journal-illustrationsbr.png",
         title: "Guided Journaling",
         desc: "Gentle prompts help you reflect and process your thoughts. Write your way to clarity with AI-curated guidance.",
         highlights: ["Smart prompts", "Mood-based themes", "Private & secure"],
@@ -132,7 +132,7 @@ const features = [
     },
     {
         icon: "🤖",
-        img: "/ai-illustration.png",
+        img: "/ai_illustrationsbr.png",
         title: "AI Companion",
         desc: "A supportive presence available 24/7. Always listening, never judging. Your personal wellness ally.",
         highlights: ["24/7 availability", "Empathetic responses", "Personalized support"],
@@ -140,7 +140,7 @@ const features = [
     },
     {
         icon: "🌱",
-        img: "/hero-illustration.png",
+        img: "/hero-illustartionsbr.png",
         title: "Growth Insights",
         desc: "Personalized recommendations to build resilience. Celebrate wins, learn from patterns, grow stronger.",
         highlights: ["Weekly reports", "Goal tracking", "Progress celebration"],
@@ -175,7 +175,7 @@ function LandingPage() {
             <nav className="nav">
                 <div className="nav-brand">
                     <span className="brand-icon">🌿</span>
-                    <span className="brand-name">MoodFlow</span>
+                    <span className="brand-name">Healio</span>
                 </div>
                 <div className="nav-links">
                     <a href="#features">Features</a>
@@ -231,7 +231,7 @@ function LandingPage() {
                     </div>
                 </div>
                 <div className={`hero-illustration ${heroVisible ? 'visible' : ''}`}>
-                    <img src="/hero-illustration.png" alt="Peaceful meditation illustration" />
+                    <img src="/hero-illustartionsbr.png" alt="Peaceful meditation illustration" />
                 </div>
             </section>
 
@@ -400,7 +400,7 @@ function LandingPage() {
                 <div className="faq-list">
                     {[
                         { q: "Is my data private and secure?", a: "Absolutely. Your data is encrypted end-to-end. We never sell it, and you can delete everything anytime." },
-                        { q: "Is this a replacement for therapy?", a: "No—MoodFlow is a supportive companion, not a substitute for professional care." },
+                        { q: "Is this a replacement for therapy?", a: "No—Healio is a supportive companion, not a substitute for professional care." },
                         { q: "How much time does it take?", a: "A quick check-in takes 30 seconds. Journaling and AI chats are entirely on your schedule." },
                         { q: "Can I try it for free?", a: "Yes! We offer a 14-day free trial with full access. No credit card required." },
                     ].map((item, i) => (
@@ -435,7 +435,7 @@ function LandingPage() {
             <footer className="footer">
                 <div className="footer-main">
                     <div className="footer-brand">
-                        <span>🌿 MoodFlow</span>
+                        <span>🌿 Healio</span>
                         <p>Your gentle companion for emotional wellness.</p>
                     </div>
                     <div className="footer-links">
@@ -459,7 +459,7 @@ function LandingPage() {
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <span>© 2024 MoodFlow. Made with 💚 for your wellbeing.</span>
+                    <span>© 2024 Healio. Made with 💚 for your wellbeing.</span>
                 </div>
             </footer>
         </div >

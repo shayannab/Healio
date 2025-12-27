@@ -12,7 +12,7 @@ function DashboardLayout({ children, rightPanel, user, activeNav, onNavChange })
             <header className="top-header">
                 <div className="header-logo">
                     <div className="header-logo-icon">💚</div>
-                    <span className="header-logo-text">Mood<span>Flow</span></span>
+                    <span className="header-logo-text">Hea<span>lio</span></span>
                 </div>
                 <div className="header-user">
                     <div>
