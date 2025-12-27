@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+import traceback
 
 # Config & Database
 from app.config.database import engine, Base
@@ -16,7 +17,7 @@ from app.analytics.routes import router as analytics_router
 from app.sos.routes import router as sos_router
 
 # Initialize Database Tables
-# This creates all tables (Users, Sessions, Insights, Consent, SOS) on startup
+# Automatically synchronizes the Identity Vault and Blockchain Ledger
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -42,17 +43,28 @@ async def moodflow_exception_handler(request: Request, exc: MoodFlowException):
         },
     )
 
+# General Exception Handler to catch 500 errors and log them
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    print(f"CRITICAL ERROR: {str(exc)}")
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"success": False, "detail": "Internal Server Error. Check Backend Logs."}
+    )
+
 # --- MIDDLEWARE (CORS) ---
-# Allows your React+Vite frontend to talk to this API
+# Allows any origin (including your Vite/React frontend) to communicate with this API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # --- ROUTER REGISTRATION ---
+# All routes match the /api/v1 prefix defined in frontend/src/services/api.js
 
 # 1. Identity & Profile Management
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["1. Identity & Auth"])

@@ -1,0 +1,95 @@
+/* ================================================
+   MOOD WAVE GRAPH STYLES
+   ================================================ */
+
+.mood-wave-card {
+    margin-bottom: 28px;
+}
+
+.mood-wave-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mood-wave-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-cream);
+    padding: 4px;
+    border-radius: var(--radius-xs);
+    width: fit-content;
+}
+
+.mood-wave-tab {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.mood-wave-tab:hover {
+    color: var(--text-primary);
+}
+
+.mood-wave-tab.active {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mood-wave-graph {
+    height: 220px;
+    position: relative;
+    margin: 20px 0;
+}
+
+.mood-wave-svg {
+    width: 100%;
+    height: 100%;
+    transition: all var(--transition-normal);
+}
+
+.mood-labels {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mood-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.mood-trend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.mood-trend-badge.improving {
+    background: rgba(124, 179, 105, 0.15);
+    color: var(--mood-good);
+}
+
+.mood-trend-badge.stable {
+    background: rgba(141, 130, 118, 0.15);
+    color: var(--mood-neutral);
+}
+
+.mood-trend-badge.declining {
+    background: rgba(242, 122, 94, 0.15);
+    color: var(--mood-sad);
+}

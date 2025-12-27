@@ -1,0 +1,133 @@
+/* ================================================
+   SIDEBAR COMPONENT STYLES
+   Left navigation panel
+   ================================================ */
+
+.sidebar {
+    background: var(--bg-sidebar);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--primary-sage);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.logo-text {
+    color: var(--text-light);
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+}
+
+.logo-text span {
+    color: var(--primary-sage);
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.nav-item a:hover {
+    background: var(--bg-sidebar-hover);
+    color: var(--text-light);
+}
+
+.nav-item a.active {
+    background: var(--primary-sage);
+    color: var(--text-primary);
+}
+
+.nav-item svg {
+    width: 22px;
+    height: 22px;
+    opacity: 0.9;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    margin-top: auto;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-sage), var(--mood-happy));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.user-status {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+}
