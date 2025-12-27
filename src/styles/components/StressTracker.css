@@ -1,0 +1,191 @@
+/* ================================================
+   STRESS TRACKER STYLES
+   ================================================ */
+
+.stress-tracker-card {
+    margin-bottom: 24px;
+}
+
+.stress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.stress-current {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stress-gauge {
+    position: relative;
+    width: 120px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.stress-gauge-bg {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 12px solid var(--bg-cream);
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(-45deg);
+}
+
+.stress-gauge-fill {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 12px solid transparent;
+    transform: rotate(-45deg);
+    transition: all var(--transition-slow);
+}
+
+.stress-gauge-fill.low {
+    border-top-color: var(--stress-low);
+    border-right-color: var(--stress-low);
+}
+
+.stress-gauge-fill.medium {
+    border-top-color: var(--stress-medium);
+    border-right-color: var(--stress-medium);
+}
+
+.stress-gauge-fill.high {
+    border-top-color: var(--stress-high);
+    border-right-color: var(--stress-high);
+}
+
+.stress-value {
+    text-align: center;
+}
+
+.stress-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+    line-height: 1;
+}
+
+.stress-number.low {
+    color: var(--stress-low);
+}
+
+.stress-number.medium {
+    color: var(--stress-medium);
+}
+
+.stress-number.high {
+    color: var(--stress-high);
+}
+
+.stress-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.stress-info {
+    flex: 1;
+}
+
+.stress-info h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.stress-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Weekly Chart */
+.stress-weekly {
+    margin-top: 20px;
+}
+
+.stress-weekly h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.stress-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 80px;
+    gap: 8px;
+}
+
+.stress-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.stress-bar {
+    width: 100%;
+    max-width: 30px;
+    border-radius: 4px 4px 0 0;
+    transition: height var(--transition-normal);
+    min-height: 4px;
+}
+
+.stress-bar.low {
+    background: var(--stress-low);
+}
+
+.stress-bar.medium {
+    background: var(--stress-medium);
+}
+
+.stress-bar.high {
+    background: var(--stress-high);
+}
+
+.stress-bar-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Triggers */
+.stress-triggers {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--bg-cream);
+}
+
+.stress-triggers h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.trigger-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.trigger-tag {
+    padding: 6px 12px;
+    background: rgba(242, 122, 94, 0.1);
+    color: var(--mood-sad);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
