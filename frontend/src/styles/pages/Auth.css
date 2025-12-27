@@ -187,39 +187,3 @@
 }
 
 /* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .auth-container {
-        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 40%),
-            radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent 40%),
-            #111827;
-    }
-
-    .auth-card {
-        background: rgba(30, 41, 59, 0.7);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    }
-
-    .auth-title {
-        color: #f8fafc;
-    }
-
-    .auth-subtitle {
-        color: #94a3b8;
-    }
-
-    .form-label {
-        color: #e2e8f0;
-    }
-
-    .form-input {
-        background: rgba(15, 23, 42, 0.5);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #f8fafc;
-    }
-
-    .form-input:focus {
-        background: rgba(15, 23, 42, 0.8);
-    }
-}

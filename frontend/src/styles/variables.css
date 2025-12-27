@@ -19,14 +19,12 @@
     --terracotta-soft: rgba(196, 134, 108, 0.12);
     --sand: #D4C4B0;
     --lavender: #B8A9C9;
-    --lavender: #B8A9C9;
     --lavender-soft: rgba(184, 169, 201, 0.12);
 
     /* --- ALIASES & MISSING VARS --- */
     --primary-sage: var(--sage);
     --primary-sage-light: var(--sage-light);
     --mood-happy: #F4D35E;
-    /* Added missing color */
 
     /* --- GRADIENTS (Soft & Warm) --- */
     --gradient-warm: linear-gradient(135deg, #FAF8F5 0%, #F0EBE3 100%);
