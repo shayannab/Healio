@@ -15,6 +15,7 @@ function BreathBubble() {
     const [time, setTime] = useState(0);
     const [sessionStart, setSessionStart] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("Streak Updated!");
 
     // Box Breathing: 4s In, 4s Hold, 4s Out, 4s Hold
     const CYCLE_DURATION = 16000;
@@ -45,10 +46,18 @@ function BreathBubble() {
             }, 100);
         } else {
             // STOPPED: Check duration
+            // STOPPED: Check duration
             if (sessionStart) {
                 const duration = (Date.now() - sessionStart) / 1000;
-                if (duration > 30) { // 30 seconds threshold
-                    storageService.updateStreak();
+                // LOWERED THRESHOLD TO 10s FOR TESTING (User Request)
+                if (duration > 10) {
+                    const result = storageService.updateStreak();
+
+                    if (result.updated) {
+                        setSuccessMessage("Streak Increased! 🔥");
+                    } else {
+                        setSuccessMessage("Streak Maintained! 🔥");
+                    }
                     setShowSuccess(true);
                     setTimeout(() => setShowSuccess(false), 3000);
                 }
@@ -175,7 +184,7 @@ function BreathBubble() {
 
                 {showSuccess && (
                     <div style={{ marginTop: '20px', color: '#F59E0B', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', animation: 'fadeIn 0.5s' }}>
-                        <Flame size={20} fill="#F59E0B" /> Streak Updated!
+                        <Flame size={20} fill="#F59E0B" /> {successMessage}
                     </div>
                 )}
             </div>

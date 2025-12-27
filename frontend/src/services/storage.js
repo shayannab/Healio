@@ -105,7 +105,7 @@ export const storageService = {
         const lastDate = prefs.lastLogDate ? new Date(prefs.lastLogDate).toDateString() : null;
 
         // If already logged today, do nothing
-        if (lastDate === today) return prefs;
+        if (lastDate === today) return { ...prefs, updated: false };
 
         let newStreak = prefs.currentStreak;
 
@@ -128,6 +128,6 @@ export const storageService = {
         };
 
         localStorage.setItem(STORAGE_KEYS.USER_PREFS, JSON.stringify(newPrefs));
-        return newPrefs;
+        return { ...newPrefs, updated: true };
     }
 };

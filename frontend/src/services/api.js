@@ -1,8 +1,10 @@
 /**
  * ============================================================================
- * MOODFLOW UNIFIED API SERVICE (v3.0.0)
+ * MOODFLOW UNIFIED API SERVICE (v3.1.0 - Hybrid)
  * ============================================================================
  */
+import { storageService } from './storage';
+import { mockMoodData, mockStressData, mockBurnoutData, mockCopingSuggestions } from '../data/mockData';
 
 // 1. Port Configuration
 const CORE_BASE = 'http://localhost:8000/api/v1'; // FastAPI Identity Vault
@@ -39,7 +41,7 @@ export const authAPI = {
      */
     login: async (credentials) => {
         const formData = new URLSearchParams();
-        formData.append('username', credentials.email); 
+        formData.append('username', credentials.email);
         formData.append('password', credentials.password);
 
         const response = await fetch(`${CORE_BASE}/auth/login`, {
@@ -47,7 +49,7 @@ export const authAPI = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData
         });
-        
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || "Invalid credentials");
 
@@ -74,55 +76,151 @@ export const authAPI = {
 // ============================================================================
 
 export const chatAPI = {
-    /**
-     * Hits the Flask AI server directly for low-latency RAG response.
-     */
+    sendChatMessage: async (message) => {
+        try {
+            const response = await fetch(`${AI_BASE}/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "AI Brain Offline");
+
+            // Adapt to expected format if needed
+            return {
+                response: data.response || data.message,
+                emotionAnalysis: data.emotionAnalysis || { emotion: 'neutral' }
+            };
+        } catch (error) {
+            console.warn("AI Chat Backend Offline, using fallback");
+            return {
+                response: "I'm having trouble connecting to my brain right now.",
+                emotionAnalysis: { emotion: 'neutral' }
+            };
+        }
+    },
+
     sendMessage: async (message) => {
-        const response = await fetch(`${AI_BASE}/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message }) //
-        });
-        
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "AI Brain Offline");
-        return data; // Returns { response: "..." }
+        // Alias for compatibility
+        return chatAPI.sendChatMessage(message);
     }
 };
 
 // ============================================================================
-// 📊 CLINICAL INSIGHTS & ANALYTICS (FASTAPI)
+// 📊 CLINICAL INSIGHTS & ANALYTICS
 // ============================================================================
 
 export const insightAPI = {
-    // For your "Amazing Looking Table"
     fetchAllInsights: () => fetchCore('/insights/all'),
-    
-    // For historical charts
     getMoodHistory: () => fetchCore('/insights/history'),
-    
     getStressTrends: () => fetchCore('/insights/stress-trends'),
-
     getBurnoutRisk: () => fetchCore('/analytics/burnout-assessment')
 };
 
 // ============================================================================
-// 🚨 EMERGENCY & SOS (FASTAPI)
+// 🚨 EMERGENCY & SOS
 // ============================================================================
 
 export const sosAPI = {
     trigger: (data) => fetchCore('/sos/trigger', {
         method: 'POST',
         body: JSON.stringify(data)
-    })
+    }),
+    triggerSOS: (data) => sosAPI.trigger(data) // Alias
 };
 
-// Unified Export
+// ============================================================================
+// 📝 LEGACY / HYBRID ADAPTERS (RESTORED FOR DASHBOARD)
+// ============================================================================
+
+// Restore: Mood API (Uses LocalStorage + Streaks)
+export const moodAPI = {
+    getMoodAnalytics: async () => {
+        // Return mock data for the graph for now
+        return mockMoodData;
+    },
+    logMood: async (moodData) => {
+        console.log("Logging mood to LocalStorage:", moodData);
+        await new Promise(r => setTimeout(r, 300));
+
+        // Update Streak (Gamification)
+        storageService.updateStreak();
+
+        // Save to Browser Storage
+        return storageService.saveMoodLog(moodData);
+    }
+};
+
+// Restore: Journal API (Uses LocalStorage)
+export const journalAPI = {
+    getRecentJournals: async () => {
+        const recent = storageService.getRecentJournals(10);
+        return { entries: recent };
+    },
+    saveJournalEntry: async (entry) => {
+        // Redirect to mood log logic for now
+        return storageService.saveMoodLog(entry);
+    }
+};
+
+// Restore: Voice Service (Port 8001)
+export async function analyzeVoiceLog(audioBlob) {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'voice_log.wav');
+
+    const response = await fetch('http://localhost:8001/analyze', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(`Voice Service Error: ${response.status}`);
+    }
+
+    return await response.json();
+}
+
+export const voiceAPI = { analyzeVoiceLog };
+
+// Restore: Mocks for other widgets
+export const stressAPI = {
+    getStressLevels: async () => mockStressData,
+    logStress: async () => ({ success: true })
+};
+
+export const burnoutAPI = {
+    getBurnoutRisk: async () => mockBurnoutData
+};
+
+export const copingAPI = {
+    getCopingSuggestions: async () => mockCopingSuggestions
+};
+
+// Top-level Named Exports for Compatibility
+export const logMood = moodAPI.logMood;
+export const getRecentJournals = journalAPI.getRecentJournals;
+export const getMoodAnalytics = moodAPI.getMoodAnalytics;
+export const getStressLevels = stressAPI.getStressLevels;
+export const getBurnoutRisk = burnoutAPI.getBurnoutRisk;
+export const getCopingSuggestions = copingAPI.getCopingSuggestions;
+export const triggerSOS = sosAPI.triggerSOS;
+export const login = authAPI.login;
+export const signup = authAPI.signup;
+
+// ============================================================================
+// UNIFIED EXPORT
+// ============================================================================
 export const api = {
     auth: authAPI,
     chat: chatAPI,
     insights: insightAPI,
-    sos: sosAPI
+    sos: sosAPI,
+    mood: moodAPI,
+    journal: journalAPI,
+    voice: voiceAPI,
+    stress: stressAPI,
+    burnout: burnoutAPI,
+    coping: copingAPI
 };
 
 export default api;
