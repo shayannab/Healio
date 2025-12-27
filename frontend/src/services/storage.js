@@ -73,5 +73,61 @@ export const storageService = {
                 hasDistress: false // logical placeholder
             };
         });
+    },
+
+    // === GAMIFICATION (STREAKS) ===
+
+    /**
+     * Get current streak data
+     * @returns {Object} { currentStreak, longestStreak, lastLogDate }
+     */
+    getStreak: () => {
+        try {
+            const data = localStorage.getItem(STORAGE_KEYS.USER_PREFS);
+            const prefs = data ? JSON.parse(data) : {};
+            return {
+                currentStreak: prefs.currentStreak || 0,
+                longestStreak: prefs.longestStreak || 0,
+                lastLogDate: prefs.lastLogDate || null
+            };
+        } catch (error) {
+            return { currentStreak: 0, longestStreak: 0, lastLogDate: null };
+        }
+    },
+
+    /**
+     * Update streak based on activity
+     * Should be called when user logs mood or completes activity
+     */
+    updateStreak: () => {
+        const prefs = storageService.getStreak();
+        const today = new Date().toDateString();
+        const lastDate = prefs.lastLogDate ? new Date(prefs.lastLogDate).toDateString() : null;
+
+        // If already logged today, do nothing
+        if (lastDate === today) return prefs;
+
+        let newStreak = prefs.currentStreak;
+
+        // check if yesterday
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        if (lastDate === yesterday.toDateString()) {
+            newStreak += 1;
+        } else {
+            // Missed a day (or first time)
+            newStreak = 1;
+        }
+
+        const newPrefs = {
+            ...prefs,
+            currentStreak: newStreak,
+            longestStreak: Math.max(newStreak, prefs.longestStreak),
+            lastLogDate: new Date().toISOString()
+        };
+
+        localStorage.setItem(STORAGE_KEYS.USER_PREFS, JSON.stringify(newPrefs));
+        return newPrefs;
     }
 };

@@ -4,14 +4,17 @@
  */
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/global.css'; // Ensure variables are available
+import '../../styles/global.css';
+import { storageService } from '../../services/storage';
+import { Flame } from 'lucide-react';
 
 function BreathBubble() {
     const navigate = useNavigate();
     const [isPlaying, setIsPlaying] = useState(false);
     const [phase, setPhase] = useState('Ready'); // Ready, Inhale, Hold, Exhale
     const [time, setTime] = useState(0);
-    const bubbleRef = useRef(null);
+    const [sessionStart, setSessionStart] = useState(null);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     // Box Breathing: 4s In, 4s Hold, 4s Out, 4s Hold
     const CYCLE_DURATION = 16000;
@@ -19,6 +22,9 @@ function BreathBubble() {
     useEffect(() => {
         let interval;
         if (isPlaying) {
+            // Start tracking session
+            if (!sessionStart) setSessionStart(Date.now());
+
             // Reset phase immediately on start
             if (phase === 'Ready') {
                 setPhase('Inhale');
@@ -38,6 +44,17 @@ function BreathBubble() {
                 });
             }, 100);
         } else {
+            // STOPPED: Check duration
+            if (sessionStart) {
+                const duration = (Date.now() - sessionStart) / 1000;
+                if (duration > 30) { // 30 seconds threshold
+                    storageService.updateStreak();
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 3000);
+                }
+                setSessionStart(null);
+            }
+
             setPhase('Ready');
             setTime(0);
         }
@@ -155,6 +172,12 @@ function BreathBubble() {
                 >
                     {isPlaying ? 'Stop' : 'Start Breathing'}
                 </button>
+
+                {showSuccess && (
+                    <div style={{ marginTop: '20px', color: '#F59E0B', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', animation: 'fadeIn 0.5s' }}>
+                        <Flame size={20} fill="#F59E0B" /> Streak Updated!
+                    </div>
+                )}
             </div>
         </div>
     );

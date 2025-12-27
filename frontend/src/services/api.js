@@ -126,6 +126,9 @@ export async function logMood(moodData) {
     // Simulate network delay for realism
     await new Promise(r => setTimeout(r, 300));
 
+    // Update Streak
+    storageService.updateStreak();
+
     // Save to Browser Storage
     return storageService.saveMoodLog(moodData);
 }
