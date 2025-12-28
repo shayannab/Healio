@@ -142,7 +142,7 @@ function MoodDashboard() {
             user={user}
             activeNav={activeNav}
             onNavChange={setActiveNav}
-            rightPanel={<RightPanelContent />}
+            rightPanel={activeNav === 'chat' ? null : <RightPanelContent />}
         >
             {/* Greeting Header */}
             <header className="greeting" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
