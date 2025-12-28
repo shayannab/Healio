@@ -1,166 +1,227 @@
 /**
  * ============================================================================
- * MOODFLOW UNIFIED API SERVICE (v3.0.0)
+ * HEALIO UNIFIED API SERVICE - FINAL STABLE VERSION
  * ============================================================================
  */
-import { storageService } from './storage';
-import { mockMoodData, mockStressData, mockBurnoutData, mockCopingSuggestions } from '../data/mockData';
 
-const CORE_BASE = 'http://localhost:8000/api/v1'; // FastAPI Core
-const AI_BASE = 'http://localhost:5000';         // Flask NLP Engine
-const VOICE_BASE = 'http://localhost:8001';      // Voice Microservice
+import { storageService } from './storage';
+import {
+  mockMoodData,
+  mockStressData,
+  mockBurnoutData,
+  mockCopingSuggestions
+} from '../data/mockData';
+
+const CORE_BASE = 'http://localhost:8000/api/v1'; // FastAPI
+const AI_BASE = 'http://localhost:5000';          // Flask NLP
+const VOICE_BASE = 'http://localhost:8001';       // Voice Service
+
+/**
+ * 🧠 Parse FastAPI errors into human-readable messages
+ */
+function parseFastAPIError(errorData) {
+  if (!errorData) return 'Unknown server error';
+
+  if (Array.isArray(errorData.detail)) {
+    return errorData.detail
+      .map(err => `${err.loc?.join('.')} → ${err.msg}`)
+      .join('\n');
+  }
+
+  if (typeof errorData.detail === 'string') {
+    return errorData.detail;
+  }
+
+  return JSON.stringify(errorData);
+}
 
 /**
  * CORE FETCH WRAPPER
+ * - Injects JWT
+ * - Handles FastAPI validation errors
  */
 async function fetchCore(endpoint, options = {}) {
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
-    };
+  const token = localStorage.getItem('token');
 
-    const response = await fetch(`${CORE_BASE}${endpoint}`, {
-        ...options,
-        headers: { ...headers, ...options.headers }
-    });
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...options.headers
+  };
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || `Vault Error: ${response.status}`);
-    return data;
+  const response = await fetch(`${CORE_BASE}${endpoint}`, {
+    ...options,
+    headers
+  });
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(`Server error (${response.status})`);
+  }
+
+  if (!response.ok) {
+    console.error('🚨 Backend error:', data);
+    throw new Error(parseFastAPIError(data));
+  }
+
+  return data;
 }
 
 // ============================================================================
-// 🛡️ AUTH & IDENTITY (FastAPI)
+// 🛡️ AUTH & IDENTITY
 // ============================================================================
 export const authAPI = {
-    login: async (credentials) => {
-        const formData = new URLSearchParams();
-        formData.append('username', credentials.email);
-        formData.append('password', credentials.password);
+  login: async (credentials) => {
+    const formData = new URLSearchParams();
+    formData.append('username', credentials.email);
+    formData.append('password', credentials.password);
 
-        const response = await fetch(`${CORE_BASE}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData
-        });
+    const response = await fetch(`${CORE_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
 
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || "Invalid credentials");
-        if (data.access_token) {
-            localStorage.setItem('token', data.access_token);
-            localStorage.setItem('user_role', data.role || 'student');
-        }
-        return data;
-    },
-    signup: (userData) => fetchCore('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(userData)
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || 'Invalid credentials');
+    }
+
+    if (data.access_token) {
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user_role', data.role || 'student');
+    }
+
+    return data;
+  },
+
+  signup: (userData) =>
+    fetchCore('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(userData)
     })
 };
 
 // ============================================================================
-// 📊 MOOD & INSIGHTS (FastAPI) - Fixes QuickCheckin.jsx and MoodDashboard.jsx
+// 📊 MOOD & INSIGHTS (MERGED + STABLE)
 // ============================================================================
 export const moodAPI = {
-    getMoodAnalytics: () => fetchCore('/insights/history'),
-    logMood: (moodData) => fetchCore('/insights/push', {
-        method: 'POST',
-        body: JSON.stringify(moodData)
+  // 📊 Analytics dashboard
+  getMoodAnalytics: () => fetchCore('/insights/all'),
+
+  // 🧠 Safe mood logger (frontend-friendly)
+  logMood: ({ mood, note }) => {
+    const emotion =
+      typeof mood === 'string'
+        ? mood
+        : mood?.label || mood?.value || 'neutral';
+
+    const summary =
+      note && note.trim().length > 0
+        ? note.trim()
+        : `User is feeling ${emotion}`;
+
+    const payload = {
+      guest_id: 'local_user',
+      dominant_emotion: emotion,
+      risk_level: 'low',
+      clinical_summary: summary,
+      themes: ['manual_entry']
+    };
+
+    console.log('📤 Sending mood payload:', payload);
+
+    return fetchCore('/insights/push', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
+
+  // ⚡ Energy tracking
+  logEnergy: (energyData) =>
+    fetchCore('/insights/energy', {
+      method: 'POST',
+      body: JSON.stringify(energyData)
     }),
-    logEnergy: (energyData) => fetchCore('/insights/energy', {
-        method: 'POST',
-        body: JSON.stringify(energyData)
-    }),
-    getInterventions: () => fetchCore('/insights/interventions')
+
+  // 🧩 Interventions & suggestions
+  getInterventions: () => fetchCore('/insights/interventions'),
+
+  // 📜 Mood history
+  getMoodHistory: () => fetchCore('/insights/history')
 };
 
-// Alias for components specifically importing { logMood }
 export const logMood = moodAPI.logMood;
 
 // ============================================================================
-// 📝 JOURNAL API (FastAPI) - Fixes MoodDashboard.jsx
+// 📝 JOURNAL
 // ============================================================================
 export const journalAPI = {
-    getRecentJournals: () => fetchCore('/journal/recent'),
-    saveJournalEntry: (entry) => fetchCore('/journal', {
-        method: 'POST',
-        body: JSON.stringify(entry)
+  getRecentJournals: () => fetchCore('/journal/recent'),
+
+  saveJournalEntry: (entry) =>
+    fetchCore('/journal', {
+      method: 'POST',
+      body: JSON.stringify(entry)
     })
 };
 
 // ============================================================================
-// 🎙️ VOICE ANALYSIS (FastAPI Port 8001) - Fixes VoiceRecorder.jsx
+// 🎙️ VOICE ANALYSIS
 // ============================================================================
 export const voiceAPI = {
-    analyzeAudio: async (audioBlob) => {
-        const formData = new FormData();
-        formData.append('file', audioBlob, 'voice_note.wav');
+  analyzeAudio: async (audioBlob) => {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'voice_note.wav');
 
-        const response = await fetch(`${VOICE_BASE}/analyze`, {
-            method: 'POST',
-            body: formData,
-        });
+    const response = await fetch(`${VOICE_BASE}/analyze`, {
+      method: 'POST',
+      body: formData
+    });
 
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || "Voice analysis failed");
-        return data;
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || 'Voice analysis failed');
     }
+
+    return data;
+  }
 };
 
 // ============================================================================
-// 🧠 CHAT API (Flask Port 5000)
+// 🧠 CHAT API
 // ============================================================================
 export const chatAPI = {
-    /**
-     * Hits the Flask AI server directly for low-latency RAG response.
-     */
-    sendMessage: async (message) => {
-        const response = await fetch(`${AI_BASE}/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message }) //
-        });
+  sendMessage: async (message) => {
+    const response = await fetch(`${AI_BASE}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
 
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "AI Brain Offline");
-        return data; // Returns { response: "..." }
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'AI service unavailable');
     }
+
+    return data;
+  }
 };
 
 // ============================================================================
-// 📊 CLINICAL INSIGHTS & ANALYTICS (FASTAPI)
+// 🔗 UNIFIED EXPORT
 // ============================================================================
-
-export const insightAPI = {
-    // For your "Amazing Looking Table"
-    fetchAllInsights: () => fetchCore('/insights/all'),
-
-    // For historical charts
-    getMoodHistory: () => fetchCore('/insights/history'),
-
-    getStressTrends: () => fetchCore('/insights/stress-trends'),
-
-    getBurnoutRisk: () => fetchCore('/analytics/burnout-assessment')
-};
-
-// ============================================================================
-// 🚨 EMERGENCY & SOS (FASTAPI)
-// ============================================================================
-
-export const sosAPI = {
-    trigger: (data) => fetchCore('/sos/trigger', {
-        method: 'POST',
-        body: JSON.stringify(data)
-    })
-};
-
-// Unified Export
 export const api = {
-    auth: authAPI,
-    chat: chatAPI,
-    insights: insightAPI,
-    sos: sosAPI
+  auth: authAPI,
+  mood: moodAPI,
+  journal: journalAPI,
+  voice: voiceAPI,
+  chat: chatAPI
 };
 
 export default api;

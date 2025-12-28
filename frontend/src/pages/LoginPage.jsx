@@ -23,6 +23,7 @@ function LoginPage() {
         }
         setLoading(false);
     };
+    
     return (
         <div className="auth-container">
             <div className="auth-card">
@@ -38,6 +39,8 @@ function LoginPage() {
                         <input
                             type="email"
                             id="email"
+                            name="email"
+                            autoComplete="email"
                             className="form-input"
                             placeholder="you@example.com"
                             value={formData.email}
@@ -51,6 +54,8 @@ function LoginPage() {
                         <input
                             type="password"
                             id="password"
+                            name="password"
+                            autoComplete="current-password"
                             className="form-input"
                             placeholder="••••••••"
                             value={formData.password}

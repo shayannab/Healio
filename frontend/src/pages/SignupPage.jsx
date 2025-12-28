@@ -1,7 +1,53 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api'; 
 import '../styles/pages/Auth.css';
 
 function SignupPage() {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = (e) => {
+        // id is used here to map the input to the state key
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const response = await authAPI.signup({
+                email: formData.email,
+                password: formData.password,
+                full_name: formData.name
+            });
+
+            if (response) {
+                alert("Account created successfully! Please sign in.");
+                navigate('/login');
+            }
+        } catch (err) {
+            console.error("Signup error:", err);
+            setError(err.message || "Failed to connect to the Identity Vault");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className="auth-container">
             <div className="auth-card">
@@ -11,14 +57,20 @@ function SignupPage() {
                     <p className="auth-subtitle">Join Healio and start your journey</p>
                 </div>
 
-                <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+                {error && <div className="auth-error-message">{error}</div>}
+
+                <form className="auth-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label className="form-label" htmlFor="name">Full Name</label>
                         <input
                             type="text"
                             id="name"
+                            name="name" // Fix: Explicit name attribute
+                            autoComplete="name" // Fix: Explicit autocomplete
                             className="form-input"
                             placeholder="John Doe"
+                            value={formData.name}
+                            onChange={handleChange}
                             required
                         />
                     </div>
@@ -28,8 +80,12 @@ function SignupPage() {
                         <input
                             type="email"
                             id="email"
+                            name="email" // Fix: Explicit name attribute
+                            autoComplete="email" // Fix: Explicit autocomplete
                             className="form-input"
                             placeholder="you@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
                             required
                         />
                     </div>
@@ -39,27 +95,35 @@ function SignupPage() {
                         <input
                             type="password"
                             id="password"
+                            name="password" // Fix: Explicit name attribute
+                            autoComplete="new-password" // Fix: Secure signup pattern
                             className="form-input"
                             placeholder="••••••••"
                             minLength="8"
+                            value={formData.password}
+                            onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label" htmlFor="confirm-password">Confirm Password</label>
+                        <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
                         <input
                             type="password"
-                            id="confirm-password"
+                            id="confirmPassword"
+                            name="confirmPassword" // Fix: Explicit name attribute
+                            autoComplete="new-password" // Fix: Matches password field hint
                             className="form-input"
                             placeholder="••••••••"
                             minLength="8"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
                             required
                         />
                     </div>
 
-                    <button type="submit" className="auth-button">
-                        Create Account
+                    <button type="submit" className="auth-button" disabled={isSubmitting}>
+                        {isSubmitting ? 'Creating Vault Identity...' : 'Create Account'}
                     </button>
                 </form>
 

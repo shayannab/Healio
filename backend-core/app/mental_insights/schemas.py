@@ -3,21 +3,24 @@ from typing import List, Optional
 import datetime
 
 class MLInsightCreate(BaseModel):
-    guest_id: str
+    # Make guest_id and clinical fields optional so simple UI check-ins work
+    guest_id: Optional[str] = "guest_user"
     dominant_emotion: str
-    risk_level: str
-    clinical_summary: str
-    themes: List[str]
+    risk_level: Optional[str] = "low"
+    clinical_summary: Optional[str] = "Manual mood check-in"
+    themes: Optional[List[str]] = ["daily_checkin"]
     transcript: Optional[str] = None
     acoustic_signals: Optional[dict] = None
 
 class MLInsightResponse(MLInsightCreate):
     id: int
-    created_at: str
+    # Change to datetime to match database objects easily
+    created_at: datetime.datetime 
 
     class Config:
         from_attributes = True
 
+# ... keep MoodLogCreate and MoodLogResponse as is
 class MoodLogCreate(BaseModel):
     mood: str
     note: Optional[str] = None

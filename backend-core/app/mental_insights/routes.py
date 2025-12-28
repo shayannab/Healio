@@ -1,17 +1,16 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List
 
 from app.config.database import get_db
 from app.sos.service import trigger_sos_escalation
-from app.mental_insights import service, schemas
+from app.mental_insights import service, schemas, models
 
 router = APIRouter()
 
 # ------------------------------------------------------------------
-# INGESTION ENDPOINT (Called by Backend-AI / ML Service)
+# INGESTION ENDPOINT (TEXT + VOICE BOTH COME HERE)
 # ------------------------------------------------------------------
-
 @router.post(
     "/push",
     status_code=status.HTTP_201_CREATED,
@@ -19,66 +18,78 @@ router = APIRouter()
 )
 def push_ml_analysis(
     insight: schemas.MLInsightCreate,
+    background_tasks: BackgroundTasks,   # ✅ ADD THIS
     db: Session = Depends(get_db)
 ):
     """
-    Ingests AI Analysis from the Backend-AI.
-    Triggers automated SOS if the risk level is 'high'.
+    Ingests AI / User journal.
+    Saves immediately.
+    Heavy tasks run in background.
     """
 
-    saved_insight = service.save_ml_insight(db, insight)
+    # ✅ FAST DB SAVE
+    saved_insight = service.save_ml_insight(
+        db=db,
+        insight_data=insight,
+        background_tasks=background_tasks
+    )
 
-    # Automated Safety Governance
-    if insight.risk_level.lower() == "high":
-        trigger_sos_escalation(
+    # ✅ SOS SHOULD NOT BLOCK RESPONSE
+    if insight.risk_level and insight.risk_level.lower() == "high":
+        background_tasks.add_task(
+            trigger_sos_escalation,
             db,
-            guest_id=insight.guest_id,
-            summary=f"AI AUTO-ESCALATION: {insight.clinical_summary}"
+            insight.guest_id,
+            f"AI AUTO-ESCALATION: {insight.clinical_summary}"
         )
 
-    # Return ONLY the persisted insight (clean API contract)
     return saved_insight
 
 
 # ------------------------------------------------------------------
-# TABLE / ANALYTICS ENDPOINTS (Frontend / Admin Dashboard)
+# JOURNAL FEED (USED BY FRONTEND)
 # ------------------------------------------------------------------
+@router.get("/journal/recent")
+def get_journal_feed(db: Session = Depends(get_db)):
+    """
+    Formats insights for the Journal UI.
+    """
+    raw_insights = (
+        db.query(models.MLInsight)
+        .order_by(models.MLInsight.created_at.desc())
+        .limit(5)
+        .all()
+    )
 
-@router.get(
-    "/all",
-    response_model=List[schemas.MLInsightResponse]
-)
-def get_all_vault_insights(
-    limit: int = 100,
-    db: Session = Depends(get_db)
-):
-    """
-    Fetches all clinical insights stored in the Identity Vault.
-    Used for analytics tables and admin dashboards.
-    """
+    return {
+        "entries": [
+            {
+                "id": entry.id,
+                "date": entry.created_at.isoformat(),
+                "preview": entry.clinical_summary or "No summary available",
+                "content": entry.clinical_summary,
+                "mood": entry.dominant_emotion.lower(),
+                "tags": entry.themes or ["Check-in"],
+                "hasDistress": entry.risk_level == "high",
+            }
+            for entry in raw_insights
+        ]
+    }
+
+
+# ------------------------------------------------------------------
+# ANALYTICS / ADMIN ENDPOINTS (UNCHANGED)
+# ------------------------------------------------------------------
+@router.get("/all", response_model=List[schemas.MLInsightResponse])
+def get_all_vault_insights(limit: int = 100, db: Session = Depends(get_db)):
     return service.get_all_insights(db, limit=limit)
 
 
-@router.get(
-    "/session/{guest_id}",
-    response_model=List[schemas.MLInsightResponse]
-)
-def get_session_insights(
-    guest_id: str,
-    db: Session = Depends(get_db)
-):
-    """
-    Fetches insights for a specific anonymous session.
-    Used when expanding a row in the analytics table.
-    """
+@router.get("/session/{guest_id}", response_model=List[schemas.MLInsightResponse])
+def get_session_insights(guest_id: str, db: Session = Depends(get_db)):
     insights = service.get_insights_by_guest(db, guest_id=guest_id)
-
     if not insights:
-        raise HTTPException(
-            status_code=404,
-            detail="No insights found for this guest"
-        )
-
+        raise HTTPException(status_code=404, detail="No insights found for this guest")
     return insights
 
 
