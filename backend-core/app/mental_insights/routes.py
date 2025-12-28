@@ -91,3 +91,49 @@ def get_session_insights(guest_id: str, db: Session = Depends(get_db)):
     if not insights:
         raise HTTPException(status_code=404, detail="No insights found for this guest")
     return insights
+
+
+# ------------------------------------------------------------------
+# CONTEXTUAL MICRO-INTERVENTIONS
+# ------------------------------------------------------------------
+
+from pydantic import BaseModel
+class EnergyLogCreate(BaseModel):
+    level: int
+    action: str
+    change: int
+
+@router.post("/energy")
+def log_energy(
+    log: EnergyLogCreate,
+    db: Session = Depends(get_db)
+):
+    """Logs a user's energy level update from the Battery Game."""
+    # TODO: Get actual user_id from auth. Using 1 for demo.
+    user_id = 1 
+    
+    db_log = models.EnergyLog(
+        user_id=user_id,
+        level=log.level,
+        action=log.action,
+        change=log.change
+    )
+    db.add(db_log)
+    db.commit()
+    db.refresh(db_log)
+    return {"status": "energy logged", "level": db_log.level}
+
+@router.get("/interventions")
+def get_interventions(db: Session = Depends(get_db)):
+    """
+    Runs the Rules Engine against the user's data to suggest interventions.
+    """
+    # TODO: Get actual user_id from auth. Using 1 for demo.
+    user_id = 1
+    
+    from app.mental_insights.rules_engine import InterventionEngine
+    engine = InterventionEngine(db, user_id)
+    recommendations = engine.run_all_checks()
+    
+    return recommendations
+

@@ -106,11 +106,13 @@ export const authAPI = {
 };
 
 // ============================================================================
-// 📊 MOOD & INSIGHTS
+// 📊 MOOD & INSIGHTS (MERGED + STABLE)
 // ============================================================================
 export const moodAPI = {
+  // 📊 Analytics dashboard
   getMoodAnalytics: () => fetchCore('/insights/all'),
 
+  // 🧠 Safe mood logger (frontend-friendly)
   logMood: ({ mood, note }) => {
     const emotion =
       typeof mood === 'string'
@@ -136,7 +138,20 @@ export const moodAPI = {
       method: 'POST',
       body: JSON.stringify(payload)
     });
-  }
+  },
+
+  // ⚡ Energy tracking
+  logEnergy: (energyData) =>
+    fetchCore('/insights/energy', {
+      method: 'POST',
+      body: JSON.stringify(energyData)
+    }),
+
+  // 🧩 Interventions & suggestions
+  getInterventions: () => fetchCore('/insights/interventions'),
+
+  // 📜 Mood history
+  getMoodHistory: () => fetchCore('/insights/history')
 };
 
 export const logMood = moodAPI.logMood;

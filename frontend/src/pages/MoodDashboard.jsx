@@ -13,6 +13,7 @@ import StressTracker from '../components/dashboard/StressTracker';
 import BurnoutIndicator from '../components/dashboard/BurnoutIndicator';
 import CopingSuggestions from '../components/dashboard/CopingSuggestions';
 import JournalEntries from '../components/dashboard/JournalEntries';
+import ChatAssistant from '../components/dashboard/ChatAssistant';
 
 // Import mock data (will be replaced with API calls)
 import {
@@ -47,16 +48,27 @@ function MoodDashboard() {
     const [copingData, setCopingData] = useState(mockCopingSuggestions);
     const [journalEntries, setJournalEntries] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(null);
+    const [interventions, setInterventions] = useState([]);
 
     const [streak, setStreak] = useState(0);
 
     // Fetch data on mount
     useEffect(() => {
         fetchRecentJournals();
+        fetchInterventions();
         // Load Streak
         const streakData = storageService.getStreak();
         setStreak(streakData.currentStreak);
     }, []);
+
+    const fetchInterventions = async () => {
+        try {
+            const data = await moodAPI.getInterventions();
+            if (data) setInterventions(data);
+        } catch (error) {
+            console.error("Failed to load interventions:", error);
+        }
+    };
 
     const fetchRecentJournals = async () => {
         try {
@@ -102,6 +114,16 @@ function MoodDashboard() {
         if (activity.id === '4' || activity.title.includes('Gratitude')) {
             navigate('/games/gratitude-garden');
         }
+
+        // Link "Walk Activity" (ID: 1)
+        if (activity.id === '1' || activity.title.includes('Walk')) {
+            navigate('/games/walk');
+        }
+
+        // Link "Grounding Exercise" (ID: 3)
+        if (activity.id === '3' || activity.title.includes('Grounding')) {
+            navigate('/games/grounding');
+        }
     };
 
     // Render right sidebar content
@@ -129,9 +151,9 @@ function MoodDashboard() {
                         <span className="greeting-wave" style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: '10px' }}>
                             <Hand size={32} color="#4F46E5" />
                         </span>
-                        {getGreeting()}, {user?.name || 'there'}
+                        {activeNav === 'chat' ? 'Healio Chat' : `${getGreeting()}, ${user?.name || 'there'}`}
                     </h1>
-                    <p>Let's check in on how you're feeling today.</p>
+                    <p>{activeNav === 'chat' ? 'I am here to listen.' : "Let's check in on how you're feeling today."}</p>
                 </div>
 
                 {/* Streak Badge */}
@@ -148,21 +170,71 @@ function MoodDashboard() {
                 </div>
             </header>
 
-            {/* Mood Wave Graph */}
-            <MoodWaveGraph data={moodData} trend={moodData.trend} />
+            {/* CHAT VIEW */}
+            {activeNav === 'chat' ? (
+                <ChatAssistant />
+            ) : (
+                <>
+                    {/* 🌟 RULES ENGINE INTERVENTIONS 🌟 */}
+                    {interventions.length > 0 && (
+                        <div style={{ marginBottom: '32px' }}>
+                            <h3 style={{ fontSize: '1.1rem', marginBottom: '16px', color: 'var(--text-secondary)' }}>Recommended for You</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+                                {interventions.map((item, index) => (
+                                    <div key={index} style={{
+                                        background: 'white',
+                                        padding: '20px',
+                                        borderRadius: 'var(--radius-lg)',
+                                        borderLeft: `6px solid ${item.priority === 'critical' ? 'var(--terracotta)' : 'var(--sage)'}`,
+                                        boxShadow: 'var(--shadow-sm)',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'
+                                    }}>
+                                        <div>
+                                            <h4 style={{ margin: '0 0 4px 0', color: 'var(--text-primary)' }}>{item.title}</h4>
+                                            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{item.message}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => navigate(item.link)}
+                                            style={{
+                                                background: item.priority === 'critical' ? 'var(--terracotta)' : 'var(--sage)',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '8px 16px',
+                                                borderRadius: 'var(--radius-full)',
+                                                cursor: 'pointer',
+                                                fontSize: '0.85rem',
+                                                fontWeight: '600',
+                                                whiteSpace: 'nowrap',
+                                                marginLeft: '16px'
+                                            }}
+                                        >
+                                            {item.action} →
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
-            {/* Quick Check-in */}
-            <QuickCheckin onMoodLogged={handleMoodLogged} />
+                    {/* Mood Wave Graph */}
+                    <MoodWaveGraph data={moodData} trend={moodData.trend} />
 
-            {/* Stress Tracker */}
-            <StressTracker data={stressData} />
+                    {/* Quick Check-in */}
+                    <QuickCheckin onMoodLogged={handleMoodLogged} />
 
-            {/* Recent Journal Entries */}
-            <JournalEntries
-                entries={journalEntries}
-                onViewEntry={(entry) => setSelectedEntry(entry)}
-                onViewAll={() => console.log('View all journals')}
-            />
+                    {/* Stress Tracker */}
+                    <StressTracker data={stressData} />
+
+                    {/* Recent Journal Entries */}
+                    <JournalEntries
+                        entries={journalEntries}
+                        onViewEntry={(entry) => setSelectedEntry(entry)}
+                        onViewAll={() => console.log('View all journals')}
+                    />
+                </>
+            )}
 
             {/* Entry Detail Modal */}
             {selectedEntry && (
