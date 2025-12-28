@@ -31,3 +31,13 @@ class MoodLog(Base):
     acoustic_signals = Column(JSON, nullable=True)
     
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class EnergyLog(Base):
+    __tablename__ = "energy_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True)
+    level = Column(Integer) # 0-100
+    action = Column(String) # 'Meeting', 'Nap', etc.
+    change = Column(Integer) # -15, +30
+    created_at = Column(DateTime, default=datetime.utcnow)

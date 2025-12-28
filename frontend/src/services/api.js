@@ -67,7 +67,12 @@ export const moodAPI = {
     logMood: (moodData) => fetchCore('/insights/push', {
         method: 'POST',
         body: JSON.stringify(moodData)
-    })
+    }),
+    logEnergy: (energyData) => fetchCore('/insights/energy', {
+        method: 'POST',
+        body: JSON.stringify(energyData)
+    }),
+    getInterventions: () => fetchCore('/insights/interventions')
 };
 
 // Alias for components specifically importing { logMood }

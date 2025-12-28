@@ -28,6 +28,15 @@ function EnergyBattery() {
         setBatteryLevel(newLevel);
         setHistory(prev => [{ label, change, time: new Date() }, ...prev]);
 
+        // Log to Backend
+        import('../../services/api').then(({ moodAPI }) => {
+            moodAPI.logEnergy({
+                level: newLevel,
+                action: label,
+                change: change
+            }).catch(err => console.error("Failed to log energy:", err));
+        });
+
         // Trigger warning if low
         if (newLevel <= 30 && batteryLevel > 30) {
             setShowWarning(true);

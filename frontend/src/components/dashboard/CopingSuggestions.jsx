@@ -41,6 +41,23 @@ function CopingSuggestions({ data, onSelectActivity }) {
                 <button
                     className="coping-view-all"
                     onClick={() => setShowAll(!showAll)}
+                    style={{
+                        marginTop: '16px',
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid var(--sage)',
+                        background: showAll ? 'var(--sage-soft)' : 'white',
+                        color: 'var(--sage)',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        transition: 'all 0.2s',
+                        boxShadow: 'var(--shadow-sm)'
+                    }}
                 >
                     {showAll ? 'Show Less' : 'View All Activities'}
                     <svg
@@ -53,7 +70,7 @@ function CopingSuggestions({ data, onSelectActivity }) {
                         strokeWidth="2"
                         style={{ transform: showAll ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
                     >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
             )}

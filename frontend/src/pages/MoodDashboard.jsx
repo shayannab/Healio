@@ -47,16 +47,27 @@ function MoodDashboard() {
     const [copingData, setCopingData] = useState(mockCopingSuggestions);
     const [journalEntries, setJournalEntries] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(null);
+    const [interventions, setInterventions] = useState([]);
 
     const [streak, setStreak] = useState(0);
 
     // Fetch data on mount
     useEffect(() => {
         fetchRecentJournals();
+        fetchInterventions();
         // Load Streak
         const streakData = storageService.getStreak();
         setStreak(streakData.currentStreak);
     }, []);
+
+    const fetchInterventions = async () => {
+        try {
+            const data = await moodAPI.getInterventions();
+            if (data) setInterventions(data);
+        } catch (error) {
+            console.error("Failed to load interventions:", error);
+        }
+    };
 
     const fetchRecentJournals = async () => {
         try {
@@ -101,6 +112,16 @@ function MoodDashboard() {
         // Link "Gratitude Garden" (ID: 4)
         if (activity.id === '4' || activity.title.includes('Gratitude')) {
             navigate('/games/gratitude-garden');
+        }
+
+        // Link "Walk Activity" (ID: 1)
+        if (activity.id === '1' || activity.title.includes('Walk')) {
+            navigate('/games/walk');
+        }
+
+        // Link "Grounding Exercise" (ID: 3)
+        if (activity.id === '3' || activity.title.includes('Grounding')) {
+            navigate('/games/grounding');
         }
     };
 
@@ -147,6 +168,49 @@ function MoodDashboard() {
                     </span>
                 </div>
             </header>
+
+            {/* 🌟 RULES ENGINE INTERVENTIONS 🌟 */}
+            {interventions.length > 0 && (
+                <div style={{ marginBottom: '32px' }}>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '16px', color: 'var(--text-secondary)' }}>Recommended for You</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+                        {interventions.map((item, index) => (
+                            <div key={index} style={{
+                                background: 'white',
+                                padding: '20px',
+                                borderRadius: 'var(--radius-lg)',
+                                borderLeft: `6px solid ${item.priority === 'critical' ? 'var(--terracotta)' : 'var(--sage)'}`,
+                                boxShadow: 'var(--shadow-sm)',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <h4 style={{ margin: '0 0 4px 0', color: 'var(--text-primary)' }}>{item.title}</h4>
+                                    <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{item.message}</p>
+                                </div>
+                                <button
+                                    onClick={() => navigate(item.link)}
+                                    style={{
+                                        background: item.priority === 'critical' ? 'var(--terracotta)' : 'var(--sage)',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '8px 16px',
+                                        borderRadius: 'var(--radius-full)',
+                                        cursor: 'pointer',
+                                        fontSize: '0.85rem',
+                                        fontWeight: '600',
+                                        whiteSpace: 'nowrap',
+                                        marginLeft: '16px'
+                                    }}
+                                >
+                                    {item.action} →
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Mood Wave Graph */}
             <MoodWaveGraph data={moodData} trend={moodData.trend} />

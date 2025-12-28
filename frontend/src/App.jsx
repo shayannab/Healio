@@ -10,6 +10,8 @@ import BreathBubble from './components/games/BreathBubble';
 import WorryTimeCapsule from './components/games/WorryTimeCapsule';
 import EnergyBattery from './components/games/EnergyBattery';
 import GratitudeGarden from './components/games/GratitudeGarden';
+import WalkActivity from './components/games/WalkActivity';
+import GroundingExercise from './components/games/GroundingExercise';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 
@@ -26,6 +28,8 @@ function App() {
           <Route path="/games/worry-capsule" element={<WorryTimeCapsule />} />
           <Route path="/games/energy-battery" element={<EnergyBattery />} />
           <Route path="/games/gratitude-garden" element={<GratitudeGarden />} />
+          <Route path="/games/walk" element={<WalkActivity />} />
+          <Route path="/games/grounding" element={<GroundingExercise />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Routes>
