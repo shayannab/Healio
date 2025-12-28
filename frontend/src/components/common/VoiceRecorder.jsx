@@ -35,7 +35,7 @@ const VoiceRecorder = ({ onAnalysisComplete }) => {
             // Verify blob is WAV
             console.log("Sending blob:", audioBlob.type, audioBlob.size);
 
-            const response = await voiceAPI.analyzeVoiceLog(audioBlob);
+            const response = await voiceAPI.analyzeAudio(audioBlob);
             if (response.success && onAnalysisComplete) {
                 onAnalysisComplete(response.data);
             }

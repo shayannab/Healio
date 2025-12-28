@@ -124,6 +124,8 @@ function QuickCheckin({ onMoodLogged }) {
             <div className={`checkin-expand ${isExpanded ? 'open' : ''}`}>
                 <textarea
                     ref={textareaRef}
+                    id="mood-note"
+                    name="mood-note"
                     className="checkin-textarea"
                     rows="4"
                     placeholder="Tell us more about how you're feeling... (optional)"
