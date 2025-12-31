@@ -3,6 +3,7 @@
  * Left navigation panel for MoodFlow
  */
 import '../../styles/components/Sidebar.css';
+import { Link } from 'react-router-dom';
 
 const navItems = [
     {
@@ -57,7 +58,7 @@ function Sidebar({ user, activeNav, onNavChange }) {
     return (
         <aside className="sidebar">
             <div className="sidebar-logo">
-                <h1 className="logo">Healio</h1>
+                <Link to="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }} aria-label="Go to landing page">Healio</Link>
             </div>
 
             <nav>

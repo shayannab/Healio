@@ -15,17 +15,17 @@ const navItems = [
         )
     },
     {
-        id: 'journal',
-        label: 'Journal',
+        id: 'questionnaire', // Changed from 'journal' to match MoodDashboard logic
+        label: 'Check-in',
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
         )
     },
     {
         id: 'chat',
-        label: 'Chat',
+        label: 'Healio AI',
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -45,19 +45,52 @@ const navItems = [
 
 function FloatingNav({ activeNav, onNavChange, user }) {
     return (
-        <nav className="floating-nav">
+        <nav className="floating-nav" style={{
+            position: 'fixed',
+            bottom: '30px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(255, 255, 255, 0.85)',
+            backdropFilter: 'blur(15px)',
+            padding: '12px 24px',
+            borderRadius: '40px',
+            display: 'flex',
+            gap: '20px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+            zIndex: 1000,
+            border: '1px solid rgba(255, 255, 255, 0.3)'
+        }}>
             {navItems.map((item) => (
                 <button
                     key={item.id}
                     className={`nav-tab ${activeNav === item.id ? 'active' : ''}`}
                     onClick={() => onNavChange?.(item.id)}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '4px',
+                        cursor: 'pointer',
+                        padding: '8px 12px',
+                        borderRadius: '20px',
+                        transition: 'all 0.3s ease',
+                        color: activeNav === item.id ? '#4F46E5' : '#6B7280'
+                    }}
                     title={item.label}
                 >
-                    {item.icon}
-                    <span className="nav-tab-label">{item.label}</span>
+                    <div style={{ width: '24px', height: '24px' }}>
+                        {item.icon}
+                    </div>
+                    <span className="nav-tab-label" style={{ 
+                        fontSize: '0.7rem', 
+                        fontWeight: activeNav === item.id ? '700' : '500' 
+                    }}>
+                        {item.label}
+                    </span>
                 </button>
             ))}
-
         </nav>
     );
 }

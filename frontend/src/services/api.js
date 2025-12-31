@@ -13,7 +13,7 @@ import {
 } from '../data/mockData';
 
 const CORE_BASE = 'http://localhost:8000/api/v1'; // FastAPI
-const AI_BASE = 'http://localhost:5000';          // Flask NLP
+const AI_BASE = 'http://localhost:5000/chat';// Flask NLP
 const VOICE_BASE = 'http://localhost:8001';       // Voice Service
 
 /**
@@ -197,22 +197,20 @@ export const voiceAPI = {
 // ============================================================================
 export const chatAPI = {
   sendMessage: async (message) => {
-    const response = await fetch(`${AI_BASE}/chat`, {
+    // This hits your Flask Backend-AI (routes.py)
+    const response = await fetch('http://localhost:5000/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ message: message }) // Matches Flask user_msg key
     });
 
     const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'AI service unavailable');
-    }
-
-    return data;
+    if (!response.ok) throw new Error(data.error || 'AI service unavailable');
+    
+    // Return formatted for ChatAssistant
+    return { text: data.response }; 
   }
 };
-
 // ============================================================================
 // 🔗 UNIFIED EXPORT
 // ============================================================================

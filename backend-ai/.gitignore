@@ -1,5 +1,0 @@
-model/saved_models/*.pkl
-model/saved_models/
-model/saved_models/
-__pycache__/
-*.pyc

@@ -5,7 +5,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.css';
 import LandingPage from './pages/LandingPage';
-import MoodDashboard from './pages/MoodDashboard';
+import MoodDashboard from './components/dashboard/MoodDashboard';
 import BreathBubble from './components/games/BreathBubble';
 import WorryTimeCapsule from './components/games/WorryTimeCapsule';
 import EnergyBattery from './components/games/EnergyBattery';
