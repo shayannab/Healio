@@ -240,26 +240,15 @@ MoodFlow/
 
 ```
 
-🤝 Contributing
-
-Contributions are welcome! Please fork the repository and use a feature branch.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 👨‍💻 Author
-
-**Shayan Behera**
-
-* **Email:** shayannabehera23@gmail.com
-* **Portfolio:** [your-portfolio.com]
+**Sibam Prasad Sahoo
+Shayanna Behera
+Spandan Kar**
 
 ⭐ Show Your Support
 
